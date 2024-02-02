@@ -3,6 +3,9 @@ import { useState } from 'react'
 import DashboardWrapper from 'src/components/DashboardWrapper'
 import Signature from 'src/components/Signature'
 import PDFViewerComponent from 'src/components/PDFViewer'
+import UploadForm from 'src/components/UploadForm'
+import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -15,20 +18,121 @@ import Divider from '@mui/material/Divider'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 
-const members = () => {
+const Members = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [emailErrorMessage, setEmailErrorMessage] = useState('')
   const [phone, setPhone] = useState('')
   const [preferredName, setPreferredName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [idOrPassportNumber, setIdOrPassportNumber] = useState('')
   const [signatureImage, setSignatureImage] = useState(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
 
-  const handleSignatureSave = imageData => {
+  const handleSignatureSave = async imageData => {
     setSignatureImage(imageData)
   }
-  const pdfUrl = 'publicpdfcontractMembership terms Jan 24.pdf'
+
+  const onSubmit = async (data, e) => {
+    e.preventDefault()
+    if (!signatureImage) {
+      alert('Signature image is missing. Please save the signature first.')
+      return
+    }
+    // check if the email exist
+    const registrationEmail = {
+      email
+    }
+
+    const emailCheckResponse = await axios.post('http://localhost:5000/api/protected/check_email', registrationEmail, {
+      withCredentials: true
+    })
+    if (emailCheckResponse.status === 204) {
+      setEmailErrorMessage('Email already exists')
+      return
+    }
+    try {
+      // Assuming you have a registration endpoint like /api/register
+      const registrationData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        preferredName,
+        dateOfBirth,
+        idOrPassportNumber
+        // Add other fields as needed
+      }
+
+      // Send registration data to the backend and get the created user data
+      const registrationResponse = await axios.post('http://localhost:5000/api/protected/register', registrationData, {
+        withCredentials: true
+      })
+
+      // Extract the created user ID or any other identifier needed for file upload
+      const userId = registrationResponse.data.id // Replace 'id' with the actual property name
+
+      // Only proceed with file uploads if the user was successfully created
+      if (registrationResponse.status === 201) {
+        // Upload signature image
+        if (signatureImage) {
+          const signatureFormData = new FormData()
+          const signatureBlob = dataURItoBlob(signatureImage)
+          signatureFormData.append('upload', signatureBlob, 'signature.png')
+
+          await axios.post(`http://localhost:5000/api/upload/signature/${userId}`, signatureFormData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+          })
+        }
+
+        // Upload PDF file
+        if (data.upload && data.upload.length > 0) {
+          const pdfFormData = new FormData()
+          const pdfFile = data.upload[0]
+          pdfFormData.append('upload', pdfFile)
+
+          await axios.post(`http://localhost:5000/api/upload/contract/${userId}`, pdfFormData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+          })
+        }
+
+        // Handle the response, you may redirect or show a success message
+        console.log('Account created successfully:', registrationResponse.data)
+
+        // Clear form data or perform other actions if needed
+      } else {
+        // Handle the case where user creation was not successful
+        console.error('User creation failed:', registrationResponse.data)
+        // You may want to show an error message or take appropriate action
+      }
+    } catch (error) {
+      console.error('Error during account creation:', error)
+      // Handle errors, show an alert, etc.
+    }
+  }
+
+  // Helper function to convert data URI to Blob
+  const dataURItoBlob = dataURI => {
+    const byteString = atob(dataURI.split(',')[1])
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    return new Blob([ab], { type: mimeString })
+  }
 
   return (
     <DashboardWrapper>
@@ -38,7 +142,7 @@ const members = () => {
             <CardHeader title='Add New Member' titleTypographyProps={{ variant: 'h6' }} />
             <Divider sx={{ margin: 0 }} />
             <CardContent>
-              <form onSubmit={e => e.preventDefault()}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid item xs={12}>
                   <Typography variant='body2' sx={{ fontWeight: 600, pb: 4 }}>
                     1. Account Details
@@ -52,9 +156,7 @@ const members = () => {
                       placeholder='John'
                       value={firstName}
                       onChange={e => setFirstName(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -64,9 +166,7 @@ const members = () => {
                       placeholder='Doe'
                       value={lastName}
                       onChange={e => setLastName(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -76,10 +176,9 @@ const members = () => {
                       placeholder='john@example.com'
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
+                    {emailErrorMessage && <div style={{ color: 'red' }}>{emailErrorMessage}</div>}
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
@@ -89,9 +188,7 @@ const members = () => {
                       placeholder='+1-123-456-8790'
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -101,9 +198,7 @@ const members = () => {
                       placeholder='Johnny'
                       value={preferredName}
                       onChange={e => setPreferredName(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -116,6 +211,7 @@ const members = () => {
                       InputProps={{
                         startAdornment: <InputAdornment position='start'></InputAdornment>
                       }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -125,9 +221,7 @@ const members = () => {
                       placeholder='Enter ID or Passport Number'
                       value={idOrPassportNumber}
                       onChange={e => setIdOrPassportNumber(e.target.value)}
-                      InputProps={{
-                        startAdornment: <InputAdornment position='start'></InputAdornment>
-                      }}
+                      required
                     />
                   </Grid>
                   <Grid item xs={6}></Grid>
@@ -139,9 +233,15 @@ const members = () => {
                     <Typography variant='body2' sx={{ fontWeight: 600 }}>
                       2. Contract
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <PDFViewerComponent pdfUrl={pdfUrl} />
+                    <input
+                      {...register('upload', {
+                        required: 'File is required' // Add a required rule
+                      })}
+                      type='file'
+                      accept='.pdf'
+                      required
+                    />
+                    {errors.upload && <p>{errors.upload.message}</p>}
                   </Grid>
 
                   <Grid item xs={12}>
@@ -158,13 +258,7 @@ const members = () => {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Button
-                      size='large'
-                      variant='contained'
-                      sx={{ marginBottom: 7 }}
-                      type='submit'
-                      // onClick={() => router.push('/')}
-                    >
+                    <Button size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>
                       Create an account
                     </Button>
                   </Grid>
@@ -178,4 +272,4 @@ const members = () => {
   )
 }
 
-export default members
+export default Members
