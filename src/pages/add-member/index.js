@@ -17,6 +17,12 @@ import CardHeader from '@mui/material/CardHeader'
 import Divider from '@mui/material/Divider'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
 
 const Members = () => {
   const [firstName, setFirstName] = useState('')
@@ -28,6 +34,9 @@ const Members = () => {
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [idOrPassportNumber, setIdOrPassportNumber] = useState('')
   const [signatureImage, setSignatureImage] = useState(null)
+  const [userRole, setUserRole] = useState('')
+  const [receiveUpdates, setReceiveUpdates] = useState(false)
+  const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false)
   const {
     register,
     handleSubmit,
@@ -54,71 +63,78 @@ const Members = () => {
     })
     if (emailCheckResponse.status === 204) {
       setEmailErrorMessage('Email already exists')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
-    }
-    try {
-      // Assuming you have a registration endpoint like /api/register
-      const registrationData = {
-        firstName,
-        lastName,
-        email,
-        phone,
-        preferredName,
-        dateOfBirth,
-        idOrPassportNumber
-        // Add other fields as needed
-      }
-
-      // Send registration data to the backend and get the created user data
-      const registrationResponse = await axios.post('http://localhost:5000/api/protected/register', registrationData, {
-        withCredentials: true
-      })
-
-      // Extract the created user ID or any other identifier needed for file upload
-      const userId = registrationResponse.data.id // Replace 'id' with the actual property name
-
-      // Only proceed with file uploads if the user was successfully created
-      if (registrationResponse.status === 201) {
-        // Upload signature image
-        if (signatureImage) {
-          const signatureFormData = new FormData()
-          const signatureBlob = dataURItoBlob(signatureImage)
-          signatureFormData.append('upload', signatureBlob, 'signature.png')
-
-          await axios.post(`http://localhost:5000/api/upload/signature/${userId}`, signatureFormData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
-          })
+    } else {
+      try {
+        // Assuming you have a registration endpoint like /api/register
+        const registrationData = {
+          firstName,
+          lastName,
+          email,
+          phone,
+          preferredName,
+          dateOfBirth,
+          idOrPassportNumber,
+          userRole
+          // Add other fields as needed
         }
 
-        // Upload PDF file
-        if (data.upload && data.upload.length > 0) {
-          const pdfFormData = new FormData()
-          const pdfFile = data.upload[0]
-          pdfFormData.append('upload', pdfFile)
-
-          await axios.post(`http://localhost:5000/api/upload/contract/${userId}`, pdfFormData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
+        // Send registration data to the backend and get the created user data
+        const registrationResponse = await axios.post(
+          'http://localhost:5000/api/protected/register',
+          registrationData,
+          {
             withCredentials: true
-          })
+          }
+        )
+
+        // Extract the created user ID or any other identifier needed for file upload
+        const userId = registrationResponse.data.id // Replace 'id' with the actual property name
+
+        // Only proceed with file uploads if the user was successfully created
+        if (registrationResponse.status === 201) {
+          // Upload signature image
+          if (signatureImage) {
+            const signatureFormData = new FormData()
+            const signatureBlob = dataURItoBlob(signatureImage)
+            signatureFormData.append('upload', signatureBlob, 'signature.png')
+
+            await axios.post(`http://localhost:5000/api/upload/signature/${userId}`, signatureFormData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              withCredentials: true
+            })
+          }
+
+          // Upload PDF file
+          if (data.upload && data.upload.length > 0) {
+            const pdfFormData = new FormData()
+            const pdfFile = data.upload[0]
+            pdfFormData.append('upload', pdfFile)
+
+            await axios.post(`http://localhost:5000/api/upload/contract/${userId}`, pdfFormData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              withCredentials: true
+            })
+          }
+
+          // Handle the response, you may redirect or show a success message
+          console.log('Account created successfully:', registrationResponse.data)
+
+          // Clear form data or perform other actions if needed
+        } else {
+          // Handle the case where user creation was not successful
+          console.error('User creation failed:', registrationResponse.data)
+          // You may want to show an error message or take appropriate action
         }
-
-        // Handle the response, you may redirect or show a success message
-        console.log('Account created successfully:', registrationResponse.data)
-
-        // Clear form data or perform other actions if needed
-      } else {
-        // Handle the case where user creation was not successful
-        console.error('User creation failed:', registrationResponse.data)
-        // You may want to show an error message or take appropriate action
+      } catch (error) {
+        console.error('Error during account creation:', error)
+        // Handle errors, show an alert, etc.
       }
-    } catch (error) {
-      console.error('Error during account creation:', error)
-      // Handle errors, show an alert, etc.
     }
   }
 
@@ -224,6 +240,25 @@ const Members = () => {
                       required
                     />
                   </Grid>
+
+                  <Grid item xs={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id='form-layouts-separator-select-label'>User Role</InputLabel>
+                      <Select
+                        label='Country'
+                        defaultValue='member'
+                        id='form-layouts-separator-select'
+                        labelId='form-layouts-separator-select-label'
+                        value={userRole}
+                        onChange={e => setUserRole(e.target.value)}
+                        required
+                      >
+                        <MenuItem value='member'>Member</MenuItem>
+                        <MenuItem value='admin'>Admin</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
                   <Grid item xs={6}></Grid>
 
                   <Grid item xs={12}>
@@ -256,7 +291,22 @@ const Members = () => {
                       </div>
                     )}
                   </Grid>
-
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      label='I would like to be updated via whatsapp'
+                      control={<Checkbox name='checkbox-whatsapp' />}
+                      checked={receiveUpdates}
+                      onChange={() => setReceiveUpdates(!receiveUpdates)}
+                      sx={{ '& .MuiButtonBase-root': { paddingTop: 0, paddingBottom: 0 } }}
+                    />
+                    <FormControlLabel
+                      label='I would like to sign up to the newsletter'
+                      control={<Checkbox name='checkbox-newsletter' />}
+                      checked={subscribeToNewsletter}
+                      onChange={() => setSubscribeToNewsletter(!subscribeToNewsletter)}
+                      sx={{ '& .MuiButtonBase-root': { paddingTop: 0, paddingBottom: 0 } }}
+                    />
+                  </Grid>
                   <Grid item xs={6}>
                     <Button size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>
                       Create an account
