@@ -35,6 +35,7 @@ const Members = () => {
   const [idOrPassportNumber, setIdOrPassportNumber] = useState('')
   const [signatureImage, setSignatureImage] = useState(null)
   const [userRole, setUserRole] = useState('')
+  const [gender, setGender] = useState('')
   const [receiveUpdates, setReceiveUpdates] = useState(false)
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false)
   const {
@@ -49,7 +50,7 @@ const Members = () => {
 
   const onSubmit = async (data, e) => {
     e.preventDefault()
-    if (!signatureImage) {
+    if (!signatureImage && userRole == 'member') {
       alert('Signature image is missing. Please save the signature first.')
       return
     }
@@ -109,7 +110,7 @@ const Members = () => {
           }
 
           // Upload PDF file
-          if (data.upload && data.upload.length > 0) {
+          if (userRole === 'member' && data.upload && data.upload.length > 0) {
             const pdfFormData = new FormData()
             const pdfFile = data.upload[0]
             pdfFormData.append('upload', pdfFile)
@@ -231,21 +232,20 @@ const Members = () => {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      label='ID or Passport Number'
-                      placeholder='Enter ID or Passport Number'
-                      value={idOrPassportNumber}
-                      onChange={e => setIdOrPassportNumber(e.target.value)}
-                      required
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel>Gender</InputLabel>
+                      <Select label='Gender' value={gender} onChange={e => setGender(e.target.value)} required>
+                        <MenuItem value='male'>Male</MenuItem>
+                        <MenuItem value='female'>Female</MenuItem>
+                        <MenuItem value='other'>Other</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
-
                   <Grid item xs={6}>
                     <FormControl fullWidth>
                       <InputLabel id='form-layouts-separator-select-label'>User Role</InputLabel>
                       <Select
-                        label='Country'
+                        label='Role'
                         defaultValue='member'
                         id='form-layouts-separator-select'
                         labelId='form-layouts-separator-select-label'
@@ -259,8 +259,16 @@ const Members = () => {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={6}></Grid>
-
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label='ID or Passport Number'
+                      placeholder='Enter ID or Passport Number'
+                      value={idOrPassportNumber}
+                      onChange={e => setIdOrPassportNumber(e.target.value)}
+                      required
+                    />
+                  </Grid>
                   <Grid item xs={12}>
                     <Divider sx={{ marginBottom: 0 }} />
                   </Grid>
@@ -270,13 +278,12 @@ const Members = () => {
                     </Typography>
                     <input
                       {...register('upload', {
-                        required: 'File is required' // Add a required rule
+                        required: userRole === 'member' ? 'File is required' : false
                       })}
                       type='file'
                       accept='.pdf'
-                      required
                     />
-                    {errors.upload && <p>{errors.upload.message}</p>}
+                    {errors.upload && <p style={{ color: 'red' }}>{errors.upload.message}</p>}
                   </Grid>
 
                   <Grid item xs={12}>
