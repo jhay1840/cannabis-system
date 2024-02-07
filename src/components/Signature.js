@@ -1,3 +1,4 @@
+import { Margin } from 'mdi-material-ui'
 import React, { useRef } from 'react'
 import SignatureCanvas from 'react-signature-canvas'
 
@@ -26,8 +27,14 @@ const Signature = ({ onSignatureSave }) => {
           style: { backgroundColor: '#f5f5f5', height: '250px' }
         }}
       />
-      <button onClick={handleSave}>Save Signature</button>
-      <button onClick={handleReset}>Reset Signature</button>
+      <div>
+        <button onClick={handleSave} style={{ margin: '5px' }}>
+          Save Signature
+        </button>
+        <button onClick={handleReset} style={{ margin: '5px' }}>
+          Reset Signature
+        </button>
+      </div>
     </div>
   )
 }

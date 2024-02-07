@@ -1,5 +1,14 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { styled } from '@mui/material/styles'
+import Button from '@mui/material/Button'
+
+const ButtonStyled = styled(Button)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    textAlign: 'center'
+  }
+}))
 
 const UploadForm = () => {
   const { register, handleSubmit } = useForm()
@@ -12,10 +21,10 @@ const UploadForm = () => {
   //   };
 
   return (
-    <div>
+    <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
       <input {...register('upload', { required: true })} type='file' accept='.pdf' />
       {/* No need for a separate upload button */}
-    </div>
+    </ButtonStyled>
   )
 }
 

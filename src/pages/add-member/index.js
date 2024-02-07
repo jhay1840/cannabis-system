@@ -23,6 +23,15 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import { styled } from '@mui/material/styles'
+import router from 'next/router'
+
+const ButtonStyled = styled(Button)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    textAlign: 'center'
+  }
+}))
 
 const Members = () => {
   const [firstName, setFirstName] = useState('')
@@ -38,6 +47,7 @@ const Members = () => {
   const [gender, setGender] = useState('')
   const [receiveUpdates, setReceiveUpdates] = useState(false)
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -77,7 +87,10 @@ const Members = () => {
           preferredName,
           dateOfBirth,
           idOrPassportNumber,
-          userRole
+          userRole,
+          gender,
+          subscribeToNewsletter,
+          receiveUpdates
           // Add other fields as needed
         }
 
@@ -125,7 +138,8 @@ const Members = () => {
 
           // Handle the response, you may redirect or show a success message
           console.log('Account created successfully:', registrationResponse.data)
-
+          const memberCode = registrationResponse.data.memberCode // Replace 'memberCode' with the actual property name
+          router.push(`/members/profile/${memberCode}`)
           // Clear form data or perform other actions if needed
         } else {
           // Handle the case where user creation was not successful
@@ -276,6 +290,7 @@ const Members = () => {
                     <Typography variant='body2' sx={{ fontWeight: 600 }}>
                       2. Contract
                     </Typography>
+
                     <input
                       {...register('upload', {
                         required: userRole === 'member' ? 'File is required' : false
@@ -283,6 +298,7 @@ const Members = () => {
                       type='file'
                       accept='.pdf'
                     />
+
                     {errors.upload && <p style={{ color: 'red' }}>{errors.upload.message}</p>}
                   </Grid>
 

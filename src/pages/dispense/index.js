@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 
 // ** Demo Components Imports
-import TableBasic from 'src/views/tables/TableBasic'
+import TableBasic from 'src/views/tables/TableMembers'
 import TableDense from 'src/views/tables/TableDense'
 import TableSpanning from 'src/views/tables/TableSpanning'
 import TableCustomized from 'src/views/tables/TableCustomized'
