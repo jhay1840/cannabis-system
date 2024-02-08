@@ -35,43 +35,63 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
   }
 }))
 
-const add_member = () => {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResult, setSearchResult] = useState([])
+const formatDate = dateString => {
+  if (!dateString || isNaN(new Date(dateString))) {
+    return '' // Return empty string for invalid or empty dates
+  }
+
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+  return new Date(dateString).toLocaleDateString(undefined, options)
+}
+const calculateAge = dob => {
+  const birthDate = new Date(dob)
+  const today = new Date()
+  const age = today.getFullYear() - birthDate.getFullYear()
+  const monthDifference = today.getMonth() - birthDate.getMonth()
+
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    return age - 1
+  }
+
+  return age
+}
+
+const member_code = () => {
   const [tableData, setTableData] = useState([])
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
 
   const router = useRouter()
-  const { memberCode } = router.query
 
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
-        const { query } = window.location
-        const { memberCode } = query
+        const { memberCode } = router.query
+        // console.log(memberCode)
 
         const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
           withCredentials: true
         })
-
-        setMemberData(response.data)
+        // Assuming response.data is an array
+        if (response.data && response.data.length > 0) {
+          setMemberData(response.data[0])
+        }
       } catch (error) {
         console.error('Error fetching member data:', error)
       }
     }
 
     fetchMemberData()
-  }, [])
+  }, [router.query.memberCode])
 
-  //   if (!memberData) {
-  //     return <p>Loading...</p>
-  //   }
+  if (!memberData) {
+    return <p>Loading...</p>
+  }
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <Card>
+        <Card sx={{ p: 5 }}>
           <CardContent>
             <Grid container spacing={5}>
               <Grid item xs={12}>
@@ -81,9 +101,11 @@ const add_member = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <ImgStyled src={imgSrc} alt='Profile Pic' />
                   <Box>
-                    <Typography variant='h6'>firstName lastName</Typography>
-                    <Typography variant='subtitle1'>Credits: 0</Typography>
-                    <Typography variant='body2'>Age y.o</Typography>
+                    <Typography variant='h6'>
+                      {memberData.firstName} {memberData.lastName}
+                    </Typography>
+                    <Typography variant='subtitle1'>Credits: {memberData.credits}</Typography>
+                    <Typography variant='body2'>{calculateAge(memberData.dateOfBirth)} y.o</Typography>
                   </Box>
                 </Box>
               </Grid>
@@ -97,13 +119,94 @@ const add_member = () => {
                   </Button>
                 </Box>
               </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Member Code:
+                  </Box>{' '}
+                  {memberData.memberCode}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Expiry:
+                  </Box>{' '}
+                  {formatDate(memberData.userInfo[0]?.expiryDate)}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Email:
+                  </Box>{' '}
+                  {memberData.userInfo[0]?.email}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    User Role:
+                  </Box>{' '}
+                  {memberData.userInfo[0]?.userRole}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Preferred Name:
+                  </Box>{' '}
+                  {memberData.userInfo[0]?.userName}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Phone Number:
+                  </Box>{' '}
+                  {memberData.phoneNumber}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Regsitration Date:
+                  </Box>{' '}
+                  {formatDate(memberData.userInfo[0]?.createdAt)}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Passport Number:
+                  </Box>{' '}
+                  {memberData.idNumber}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Date of Birth:
+                  </Box>{' '}
+                  {formatDate(memberData.dateOfBirth)}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant='body1'>
+                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                    Gender:
+                  </Box>{' '}
+                  {memberData.gender}
+                </Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
       </Grid>
 
       <Grid item xs={12}>
-        <Card>
+        <Card sx={{ p: 5 }}>
           <CardContent>
             <Typography variant='h5'>Dispense History</Typography>
             <TableBasic data={tableData} />
@@ -114,4 +217,4 @@ const add_member = () => {
   )
 }
 
-export default add_member
+export default member_code

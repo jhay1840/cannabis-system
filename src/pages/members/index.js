@@ -19,6 +19,7 @@ import Magnify from 'mdi-material-ui/Magnify'
 
 const add_member = () => {
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchQueryID, setSearchQueryID] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [tableData, setTableData] = useState([])
 
@@ -30,7 +31,6 @@ const add_member = () => {
           withCredentials: true // Add this option
         })
         setTableData(response.data)
-        console.log(tableData)
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -39,14 +39,52 @@ const add_member = () => {
     fetchData()
   }, [])
 
-  const handleSearch = async () => {
+  const handleSearch = async event => {
+    event.preventDefault()
     try {
-      const response = await axios.get('http://localhost:5000/api/protected/members/search', {
-        params: { query: searchQuery },
-        withCredentials: true
-      })
+      let response
+      if (searchQuery.trim() === '') {
+        // If search query is empty, fetch default data
+        response = await axios.get('http://localhost:5000/api/protected/members', {
+          withCredentials: true // Add this option
+        })
+      } else {
+        // Otherwise, perform search
+        response = await axios.get('http://localhost:5000/api/protected/members/search', {
+          params: { name: searchQuery },
+          withCredentials: true
+        })
+      }
 
-      setSearchResult(response.data)
+      setTableData(response.data)
+      // Clear the other form's search query
+      setSearchQueryID('')
+    } catch (error) {
+      console.error('Error while searching members:', error)
+      // Handle the error, e.g., show an error message to the user
+    }
+  }
+
+  const handleSearchbyID = async event => {
+    event.preventDefault()
+    try {
+      let response
+      if (searchQueryID.trim() === '') {
+        // If search query is empty, fetch default data
+        response = await axios.get('http://localhost:5000/api/protected/members', {
+          withCredentials: true // Add this option
+        })
+      } else {
+        // Otherwise, perform search
+        response = await axios.get('http://localhost:5000/api/protected/members/searchbyid', {
+          params: { id: searchQueryID },
+          withCredentials: true
+        })
+      }
+
+      setTableData(response.data)
+      // Clear the other form's search query
+      setSearchQuery('')
     } catch (error) {
       console.error('Error while searching members:', error)
       // Handle the error, e.g., show an error message to the user
@@ -64,11 +102,13 @@ const add_member = () => {
             <CardContent>
               <Grid container spacing={5}>
                 <Grid item xs={6}>
-                  <form onSubmit={e => e.preventDefault()}>
+                  <form onSubmit={handleSearchbyID}>
                     <TextField
                       fullWidth
                       label='SCAN CHIP/CARD'
                       placeholder='ID Number'
+                      value={searchQueryID}
+                      onChange={e => setSearchQueryID(e.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>
@@ -83,11 +123,13 @@ const add_member = () => {
                   </form>
                 </Grid>
                 <Grid item xs={6}>
-                  <form onSubmit={e => e.preventDefault()}>
+                  <form onSubmit={handleSearch}>
                     <TextField
                       fullWidth
                       label='Search'
                       placeholder='Name'
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>
@@ -108,7 +150,7 @@ const add_member = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Card>
+          <Card sx={{ p: 5 }}>
             <CardHeader title='Members' titleTypographyProps={{ variant: 'h6' }} />
             <TableBasic data={tableData} />
           </Card>
