@@ -20,6 +20,7 @@ import TableBasic from 'src/views/tables/TableMembers'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
+import DashboardWrapper from 'src/components/DashboardWrapper'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 150,
@@ -89,131 +90,133 @@ const member_code = () => {
   }
 
   return (
-    <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <Card sx={{ p: 5 }}>
-          <CardContent>
-            <Grid container spacing={5}>
-              <Grid item xs={12}>
-                <Typography variant='h5'>Personal Information</Typography>
-              </Grid>
-              <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <ImgStyled src={imgSrc} alt='Profile Pic' />
-                  <Box>
-                    <Typography variant='h6'>
-                      {memberData.firstName} {memberData.lastName}
-                    </Typography>
-                    <Typography variant='subtitle1'>Credits: {memberData.credits}</Typography>
-                    <Typography variant='body2'>{calculateAge(memberData.dateOfBirth)} y.o</Typography>
+    <DashboardWrapper>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <Card sx={{ p: 5 }}>
+            <CardContent>
+              <Grid container spacing={5}>
+                <Grid item xs={12}>
+                  <Typography variant='h5'>Personal Information</Typography>
+                </Grid>
+                <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <ImgStyled src={imgSrc} alt='Profile Pic' />
+                    <Box>
+                      <Typography variant='h6'>
+                        {memberData.firstName} {memberData.lastName}
+                      </Typography>
+                      <Typography variant='subtitle1'>Credits: {memberData.credits}</Typography>
+                      <Typography variant='body2'>{calculateAge(memberData.dateOfBirth)} y.o</Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </Grid>
-              <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                  <Button size='large' variant='contained' href='#text-buttons'>
-                    Dispense
-                  </Button>
-                  <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons'>
-                    Edit Profile
-                  </Button>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Member Code:
-                  </Box>{' '}
-                  {memberData.memberCode}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Expiry:
-                  </Box>{' '}
-                  {formatDate(memberData.userInfo[0]?.expiryDate)}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Email:
-                  </Box>{' '}
-                  {memberData.userInfo[0]?.email}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    User Role:
-                  </Box>{' '}
-                  {memberData.userInfo[0]?.userRole}
-                </Typography>
-              </Grid>
+                </Grid>
+                <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <Button size='large' variant='contained' href='#text-buttons'>
+                      Dispense
+                    </Button>
+                    <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons'>
+                      Edit Profile
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Member Code:
+                    </Box>{' '}
+                    {memberData.memberCode}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Expiry:
+                    </Box>{' '}
+                    {formatDate(memberData.userInfo[0]?.expiryDate)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Email:
+                    </Box>{' '}
+                    {memberData.userInfo[0]?.email}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      User Role:
+                    </Box>{' '}
+                    {memberData.userInfo[0]?.userRole}
+                  </Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Preferred Name:
-                  </Box>{' '}
-                  {memberData.userInfo[0]?.userName}
-                </Typography>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Preferred Name:
+                    </Box>{' '}
+                    {memberData.userInfo[0]?.userName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Phone Number:
+                    </Box>{' '}
+                    {memberData.phoneNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Regsitration Date:
+                    </Box>{' '}
+                    {formatDate(memberData.userInfo[0]?.createdAt)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Passport Number:
+                    </Box>{' '}
+                    {memberData.idNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Date of Birth:
+                    </Box>{' '}
+                    {formatDate(memberData.dateOfBirth)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Gender:
+                    </Box>{' '}
+                    {memberData.gender}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Phone Number:
-                  </Box>{' '}
-                  {memberData.phoneNumber}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Regsitration Date:
-                  </Box>{' '}
-                  {formatDate(memberData.userInfo[0]?.createdAt)}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Passport Number:
-                  </Box>{' '}
-                  {memberData.idNumber}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Date of Birth:
-                  </Box>{' '}
-                  {formatDate(memberData.dateOfBirth)}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant='body1'>
-                  <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                    Gender:
-                  </Box>{' '}
-                  {memberData.gender}
-                </Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      <Grid item xs={12}>
-        <Card sx={{ p: 5 }}>
-          <CardContent>
-            <Typography variant='h5'>Dispense History</Typography>
-            <TableBasic data={tableData} />
-          </CardContent>
-        </Card>
+        <Grid item xs={12}>
+          <Card sx={{ p: 5 }}>
+            <CardContent>
+              <Typography variant='h5'>Dispense History</Typography>
+              <TableBasic data={tableData} />
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </DashboardWrapper>
   )
 }
 
