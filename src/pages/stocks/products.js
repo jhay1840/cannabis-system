@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import Magnify from 'mdi-material-ui/Magnify'
-import CardProduct from 'src/views/cards/CardProduct'
+import CardProductStocks from 'src/views/cards/CardProductStocks'
 
 const transformImageUrl = imageUrl => {
   if (!imageUrl || typeof imageUrl !== 'string') {
@@ -24,7 +24,7 @@ const transformImageUrl = imageUrl => {
   return imageUrl.replace(/\\/g, '/')
 }
 
-const Products = () => {
+const Stocks = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [initialLoadCount, setInitialLoadCount] = useState(6)
@@ -80,13 +80,13 @@ const Products = () => {
     <DashboardWrapper>
       <Grid container spacing={6}>
         <Grid item xs={6}>
-          <Typography variant='h5'>Products</Typography>
+          <Typography variant='h5'>Stocks</Typography>
         </Grid>
         <Grid item xs={6}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             <Link href='/products/add-product' passHref>
               <Button size='large' color='success' variant='contained'>
-                Add Products
+                Add New Product
               </Button>
             </Link>
           </Box>
@@ -124,15 +124,14 @@ const Products = () => {
             </CardContent>
           </Card>
         </Grid>
-
         {searchResult.length > 0 ? (
           searchResult.slice(0, initialLoadCount).map(product => (
             <Grid item xs={12} sm={6} md={3} key={product._id}>
-              <CardProduct
+              <CardProductStocks
                 imageUrl={transformImageUrl(product.imageURL)}
                 title={product.name}
                 price={product.salePrice ? `${product.salePrice} token` : 'Price not set'}
-                url={`/products/${product._id}`}
+                url={`/stocks/add/${product._id}`}
               />
             </Grid>
           ))
@@ -156,4 +155,4 @@ const Products = () => {
   )
 }
 
-export default Products
+export default Stocks

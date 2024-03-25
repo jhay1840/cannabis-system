@@ -1,55 +1,115 @@
-// ** React Imports
-import { useState } from 'react'
-
 // ** MUI Imports
-import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
-import TabContext from '@mui/lab/TabContext'
-import { styled } from '@mui/material/styles'
-import MuiTab from '@mui/material/Tab'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import Link from 'next/link'
 
 // ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import InformationOutline from 'mdi-material-ui/InformationOutline'
+import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
+import ViewGridPlus from 'mdi-material-ui/ViewGridPlus'
+import { GridOff } from 'mdi-material-ui'
+import { ViewGrid } from 'mdi-material-ui'
 
-// ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
-import TabAccount from 'src/views/account-settings/TabAccount'
-import TabSecurity from 'src/views/account-settings/TabSecurity'
+const CardBasic = () => {
+  return (
+    <Grid container spacing={6}>
+      <Grid item xs={12} sx={{ paddingBottom: 4 }}>
+        <Typography variant='h5'>Stocks</Typography>
+      </Grid>
 
-// ** Third Party Styles Imports
-import 'react-datepicker/dist/react-datepicker.css'
-
-const Tab = styled(MuiTab)(({ theme }) => ({
-  [theme.breakpoints.down('md')]: {
-    minWidth: 100
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: 67
-  }
-}))
-
-const TabName = styled('span')(({ theme }) => ({
-  lineHeight: 1.71,
-  fontSize: '0.875rem',
-  marginLeft: theme.spacing(2.4),
-  [theme.breakpoints.down('md')]: {
-    display: 'none'
-  }
-}))
-
-const AccountSettings = () => {
-  // ** State
-  const [value, setValue] = useState('account')
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
-
-  return <Card></Card>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card>
+          <CardContent
+            sx={{
+              display: 'flex',
+              textAlign: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              padding: theme => `${theme.spacing(9.75, 5, 9.25)} !important`
+            }}
+          >
+            <Avatar
+              sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
+            >
+              <ViewGridPlus sx={{ fontSize: '2rem' }} />
+            </Avatar>
+            <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
+              Add New Stock
+            </Typography>
+            <Typography variant='body2' sx={{ marginBottom: 6 }}>
+              Easily input new cannabis products into your inventory system for accurate stock tracking.
+            </Typography>
+            <Link href={`stocks/products/`} passHref>
+              <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
+                Add
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card>
+          <CardContent
+            sx={{
+              display: 'flex',
+              textAlign: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              padding: theme => `${theme.spacing(9.75, 5, 9.25)} !important`
+            }}
+          >
+            <Avatar
+              sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
+            >
+              <ViewGrid sx={{ fontSize: '2rem' }} />
+            </Avatar>
+            <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
+              View Stocks
+            </Typography>
+            <Typography variant='body2' sx={{ marginBottom: 6 }}>
+              Access a detailed overview of your cannabis inventory, including quantities and product details, to
+              facilitate inventory control and decision-making.
+            </Typography>
+            <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
+              View
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card>
+          <CardContent
+            sx={{
+              display: 'flex',
+              textAlign: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              padding: theme => `${theme.spacing(9.75, 5, 9.25)} !important`
+            }}
+          >
+            <Avatar
+              sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
+            >
+              <GridOff sx={{ fontSize: '2rem' }} />
+            </Avatar>
+            <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
+              Closing Stocks
+            </Typography>
+            <Typography variant='body2' sx={{ marginBottom: 6 }}>
+              Input the final inventory figures at the end of each day to accurately compare stock levels, ensuring
+              precise inventory management and seamless business operations.
+            </Typography>
+            <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
+              Close
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  )
 }
 
-export default AccountSettings
+export default CardBasic

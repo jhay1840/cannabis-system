@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashboardWrapper from 'src/components/DashboardWrapper'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -56,7 +56,7 @@ const addProduct = () => {
   const [medicalDescription, setMedicalDescription] = useState('')
   const [category, setCategory] = useState('')
   const [productImage, setProductImage] = useState('')
-  const [productImageUrl, setProductImageUrl] = useState('')
+  const [productImageUrl, setProductImageUrl] = useState('first')
   const [salePrice, setSalePrice] = useState('')
   const [costPrice, setCostPrice] = useState('')
   const [imgSrc, setImgSrc] = useState('/images/avatars/cannabis-product-default.jpg')
@@ -68,7 +68,6 @@ const addProduct = () => {
       reader.onload = () => setImgSrc(reader.result)
       reader.readAsDataURL(files[0])
       setProductImage(files[0])
-      console.log(productImage)
     }
   }
   const uploadImage = async file => {
@@ -83,7 +82,11 @@ const addProduct = () => {
         withCredentials: true
       })
       console.log(response.data)
-      setProductImageUrl(response.data)
+      // setProductImageUrl(response.data)
+      if (response.data == '') {
+        return ''
+      }
+      return response.data
     } catch (error) {
       console.error(error)
     }
@@ -91,37 +94,54 @@ const addProduct = () => {
 
   const onSubmit = async data => {
     try {
-      await uploadImage(productImage)
-      const response = await axios.post(
-        'http://localhost:5000/api/protected/addProduct',
-        {
-          name,
-          secondBreed,
-          type,
-          sativa,
-          thc,
-          cbd,
-          cbn,
-          description,
-          medicalDescription,
-          category,
-          productImageUrl,
-          salePrice,
-          costPrice
-        },
-        { withCredentials: true }
-      )
-      // Check if the product was successfully added
-      if (response.status === 201) {
-        // Redirect to the products page
-        router.push(`/products`)
-      } else {
-        console.error('Failed to add product')
-      }
+      var imageUrl = await uploadImage(productImage)
+      setProductImageUrl(imageUrl)
     } catch (error) {
       console.error(error)
     }
   }
+  useEffect(() => {
+    if (productImageUrl == 'first') {
+      setProductImageUrl = ''
+    } else {
+      const fetchData = async () => {
+        try {
+          // alert(productImageUrl)
+          const response = await axios.post(
+            'http://localhost:5000/api/protected/addProduct',
+            {
+              name,
+              secondBreed,
+              type,
+              sativa,
+              thc,
+              cbd,
+              cbn,
+              description,
+              medicalDescription,
+              category,
+              productImageUrl,
+              salePrice,
+              costPrice
+            },
+            { withCredentials: true }
+          )
+          // Check if the product was successfully added
+          if (response.status === 201) {
+            // Redirect to the products page
+            router.push(`/products`)
+          } else {
+            console.error('Failed to add product')
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
+      fetchData()
+    }
+    // Call the async function
+  }, [productImageUrl])
 
   //| Helper function to convert data URI to Blob
   const dataURItoBlob = dataURI => {

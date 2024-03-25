@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 
 import Link from 'next/link'
 
-const CardProduct = ({ imageUrl, title, description, price, url }) => {
+const CardProductStocks = ({ imageUrl, title, price, url }) => {
   return (
     <Card>
       <CardMedia sx={{ height: '14.5625rem' }} image={imageUrl} />
@@ -18,11 +18,11 @@ const CardProduct = ({ imageUrl, title, description, price, url }) => {
       </CardContent>
       <Link href={url}>
         <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
-          View Product
+          Add Stocks
         </Button>
       </Link>
     </Card>
   )
 }
 
-export default CardProduct
+export default CardProductStocks
