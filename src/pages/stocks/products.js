@@ -130,8 +130,9 @@ const Stocks = () => {
               <CardProductStocks
                 imageUrl={transformImageUrl(product.imageURL)}
                 title={product.name}
-                price={product.salePrice ? `${product.salePrice} token` : 'Price not set'}
+                stock={product.stock ? `${product.stock} in stock` : 'Out of stock'}
                 url={`/stocks/add/${product._id}`}
+                colors={product.stock ? 'success.main' : 'error'}
               />
             </Grid>
           ))

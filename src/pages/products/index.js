@@ -133,6 +133,8 @@ const Products = () => {
                 title={product.name}
                 price={product.salePrice ? `${product.salePrice} token` : 'Price not set'}
                 url={`/products/${product._id}`}
+                stock={product.stock ? `${product.stock} in stock` : 'Out of stock'}
+                colors={product.stock ? 'success.main' : 'error'}
               />
             </Grid>
           ))

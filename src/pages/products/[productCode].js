@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles'
 
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
+import TableTransaction from 'src/views/tables/TableTransactions'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -112,6 +113,7 @@ const product_Code = () => {
     const fetchProductData = async () => {
       try {
         const { productCode } = router.query
+
         if (!productCode) {
           return
         }
@@ -129,6 +131,27 @@ const product_Code = () => {
     }
 
     fetchProductData()
+
+    const fetchTransactionData = async () => {
+      const { productCode } = router.query
+      const productId = productCode
+
+      try {
+        const response = await axios.get('http://localhost:5000/api/protected/cannabisTransactions', {
+          params: { productId },
+          withCredentials: true
+        })
+
+        // Assuming response.data is an array
+        if (response.data && response.data.length > 0) {
+          setTableData(response.data)
+        }
+      } catch (error) {
+        console.error('Error fetching transaction data:', error)
+      }
+    }
+
+    fetchTransactionData()
   }, [router.query.productCode])
 
   if (!productData) {
@@ -153,7 +176,9 @@ const product_Code = () => {
                         {productData.name}
                       </Typography>
                       <Typography variant='subtitle1'>Sale Price: {productData.salePrice}</Typography>
-                      <Typography variant='body2'>Cost Price: {productData.costPrice}</Typography>
+                      <Typography variant='body2' color={productData.stock ? 'success.main' : 'error'}>
+                        {productData.stock ? `${productData.stock} in stock` : 'Out of stock'}
+                      </Typography>
                     </Box>
                   </Box>
                 </Grid>
@@ -249,7 +274,7 @@ const product_Code = () => {
                     {productData.description}
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item sm={6} xs={12}>
                   <Typography variant='body1'>
                     <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
                       Medical Description
@@ -262,11 +287,24 @@ const product_Code = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item sm={12} xs={12} sx={{ mt: 6 }}>
           <Card sx={{ p: 5 }}>
             <CardContent>
-              <Typography variant='h5'>Transaction History</Typography>
-              <TableBasic data={tableData} />
+              <Typography variant='h5'>Purchase Stock History</Typography>
+
+              <TableTransaction data={tableData} />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item sm={12} xs={12}>
+          <Card sx={{ p: 5 }}>
+            <CardContent>
+              <Typography variant='h5'>Dispense History</Typography>
+
+              {/* <TableTransaction data={tableData} />  */}
+              <Typography variant='body1' sx={{ mt: 4 }}>
+                No data yet
+              </Typography>
             </CardContent>
           </Card>
         </Grid>

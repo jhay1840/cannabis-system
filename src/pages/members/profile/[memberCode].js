@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import router from 'next/router'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -17,6 +18,7 @@ import { styled } from '@mui/material/styles'
 
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
+import TableMembersCredit from 'src/views/tables/TableMembersCredit'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -59,30 +61,53 @@ const calculateAge = dob => {
 
 const member_code = () => {
   const [tableData, setTableData] = useState([])
+  const [tableDataCredits, setTableDataCredits] = useState([])
+
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
+  const [memberCodeVar, setMemberCodeVar] = useState(null)
 
   const router = useRouter()
 
-  useEffect(() => {
-    const fetchMemberData = async () => {
-      try {
-        const { memberCode } = router.query
-        // console.log(memberCode)
+  const fetchTransactionData = async () => {
+    const { memberCode } = router.query
+    const memberId = memberCode
+    console.log(memberId)
+    try {
+      const response = await axios.get('http://localhost:5000/api/protected/creditTransactions', {
+        params: { memberId },
+        withCredentials: true
+      })
 
-        const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
-          withCredentials: true
-        })
-        // Assuming response.data is an array
-        if (response.data && response.data.length > 0) {
-          setMemberData(response.data[0])
-        }
-      } catch (error) {
-        console.error('Error fetching member data:', error)
+      // Assuming response.data is an array
+      if (response.data && response.data.length > 0) {
+        setTableDataCredits(response.data)
       }
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching transaction data:', error)
     }
+  }
+  const fetchMemberData = async () => {
+    try {
+      const { memberCode } = router.query
 
+      const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
+        withCredentials: true
+      })
+      // Assuming response.data is an array
+      if (response.data && response.data.length > 0) {
+        setMemberData(response.data[0])
+        setMemberCodeVar(memberCode)
+      }
+    } catch (error) {
+      console.error('Error fetching member data:', error)
+    }
+  }
+
+  useEffect(() => {
     fetchMemberData()
+    fetchTransactionData()
   }, [router.query.memberCode])
 
   if (!memberData) {
@@ -113,9 +138,11 @@ const member_code = () => {
                 </Grid>
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <Button size='large' variant='contained' href='#text-buttons'>
-                      Dispense
-                    </Button>
+                    <Link href={`/members/credit/${memberCodeVar}`} passHref>
+                      <Button size='large' variant='outlined' href='#text-buttons' color='success'>
+                        Add Credit
+                      </Button>
+                    </Link>
                     <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons'>
                       Edit Profile
                     </Button>
@@ -212,6 +239,14 @@ const member_code = () => {
             <CardContent>
               <Typography variant='h5'>Dispense History</Typography>
               <TableBasic data={tableData} />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card sx={{ p: 5 }}>
+            <CardContent>
+              <Typography variant='h5'>Donation History</Typography>
+              <TableMembersCredit data={tableDataCredits} />
             </CardContent>
           </Card>
         </Grid>

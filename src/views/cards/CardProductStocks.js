@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 
 import Link from 'next/link'
 
-const CardProductStocks = ({ imageUrl, title, price, url }) => {
+const CardProductStocks = ({ imageUrl, title, stock, url, colors }) => {
   return (
     <Card>
       <CardMedia sx={{ height: '14.5625rem' }} image={imageUrl} />
@@ -14,7 +14,9 @@ const CardProductStocks = ({ imageUrl, title, price, url }) => {
         <Typography variant='h6' sx={{ marginBottom: 2 }}>
           {title}
         </Typography>
-        <Typography sx={{ marginBottom: 2 }}>{price}</Typography>
+        <Typography sx={{ marginBottom: 2 }} color={colors}>
+          {stock}
+        </Typography>
       </CardContent>
       <Link href={url}>
         <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>

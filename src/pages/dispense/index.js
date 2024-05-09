@@ -12,7 +12,7 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import DashboardWrapper from 'src/components/DashboardWrapper'
 // ** Demo Components Imports
-import TableBasic from 'src/views/tables/TableMembers'
+import TableMembersDispense from 'src/views/tables/TableMembersDispense'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -152,7 +152,7 @@ const dispense = () => {
         <Grid item xs={12}>
           <Card sx={{ p: 5 }}>
             <CardHeader title='Members' titleTypographyProps={{ variant: 'h6' }} />
-            <TableBasic data={tableData} />
+            <TableMembersDispense data={tableData} />
           </Card>
         </Grid>
       </Grid>
