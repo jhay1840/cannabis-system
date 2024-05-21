@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles'
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
 import TableMembersCredit from 'src/views/tables/TableMembersCredit'
+import TableDispenseTransaction from 'src/views/tables/TableDispenseTransaction'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -62,6 +63,7 @@ const calculateAge = dob => {
 const member_code = () => {
   const [tableData, setTableData] = useState([])
   const [tableDataCredits, setTableDataCredits] = useState([])
+  const [dispenseData, setDispenseData] = useState([])
 
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
@@ -88,6 +90,25 @@ const member_code = () => {
       console.error('Error fetching transaction data:', error)
     }
   }
+  const fetchDispenseTransactionData = async () => {
+    const { memberCode } = router.query
+    const memberId = memberCode
+    console.log(memberId)
+    try {
+      const response = await axios.get('http://localhost:5000/api/protected/dispenseTransactions', {
+        params: { memberId },
+        withCredentials: true
+      })
+
+      // Assuming response.data is an array
+      if (response.data && response.data.length > 0) {
+        setDispenseData(response.data)
+      }
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching transaction data:', error)
+    }
+  }
   const fetchMemberData = async () => {
     try {
       const { memberCode } = router.query
@@ -108,6 +129,7 @@ const member_code = () => {
   useEffect(() => {
     fetchMemberData()
     fetchTransactionData()
+    fetchDispenseTransactionData()
   }, [router.query.memberCode])
 
   if (!memberData) {
@@ -238,7 +260,7 @@ const member_code = () => {
           <Card sx={{ p: 5 }}>
             <CardContent>
               <Typography variant='h5'>Dispense History</Typography>
-              <TableBasic data={tableData} />
+              <TableDispenseTransaction data={dispenseData} />
             </CardContent>
           </Card>
         </Grid>

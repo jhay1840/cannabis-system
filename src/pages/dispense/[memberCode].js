@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import router from 'next/router'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -10,23 +9,22 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
+import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
+import { Magnify } from 'mdi-material-ui'
+
+// ** Custom Components Imports
 import CardProductDispense from 'src/views/cards/CardProductDispense'
-
-// ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
-
-// ** Icons Imports
-import Magnify from 'mdi-material-ui/Magnify'
 import DashboardWrapper from 'src/components/DashboardWrapper'
+import TableDispenseTransaction from 'src/views/tables/TableDispenseTransaction'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 150,
@@ -41,12 +39,14 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     textAlign: 'center'
   }
 }))
+
 const transformImageUrl = imageUrl => {
   if (!imageUrl || typeof imageUrl !== 'string') {
     return '/images/avatars/cannabis-product-default.jpg'
   }
   return imageUrl.replace(/\\/g, '/')
 }
+
 const formatDate = dateString => {
   if (!dateString || isNaN(new Date(dateString))) {
     return '' // Return empty string for invalid or empty dates
@@ -55,6 +55,7 @@ const formatDate = dateString => {
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
+
 const calculateAge = dob => {
   const birthDate = new Date(dob)
   const today = new Date()
@@ -68,47 +69,36 @@ const calculateAge = dob => {
   return age
 }
 
-const member_code = () => {
+const MemberCode = () => {
   const [tableData, setTableData] = useState([])
+  const [dispenseData, setDispenseData] = useState([])
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
   const [memberCodeVar, setMemberCodeVar] = useState(null)
-  const [totalWeight, setTotalWeight] = useState(0) // State for total weight
-  const [totalPrice, setTotalPrice] = useState(0) // State for total weight
-
-  const [products, setProducts] = useState([]) // State for products
-
-  const router = useRouter()
+  const [totalWeight, setTotalWeight] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [estimatedCredits, setEstimatedCredits] = useState(0)
+  const [products, setProducts] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [initialLoadCount, setInitialLoadCount] = useState(6)
   const [loadMoreCount, setLoadMoreCount] = useState(6)
   const [debounceTimer, setDebounceTimer] = useState(null)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+  const [openModal, setOpenModal] = useState(false) // State for modal visibility
 
-  useEffect(() => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer)
-    }
-    const timer = setTimeout(() => {
-      handleSearch()
-    }, 500) // Adjust debounce delay as needed (e.g., 500 milliseconds)
-    setDebounceTimer(timer)
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+  const handleOpenModal = () => setOpenModal(true)
+  const handleCloseModal = () => setOpenModal(false)
+
+  const router = useRouter()
 
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
         const { memberCode } = router.query
-
         const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
           withCredentials: true
         })
-        // Assuming response.data is an array
         if (response.data && response.data.length > 0) {
           setMemberData(response.data[0])
           setMemberCodeVar(memberCode)
@@ -118,8 +108,15 @@ const member_code = () => {
       }
     }
 
-    fetchMemberData()
+    if (router.query.memberCode) {
+      fetchMemberData()
+      fetchTransactionData()
+    }
   }, [router.query.memberCode])
+
+  useEffect(() => {
+    fetchData()
+  }, [])
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/protected/cannabisProducts', {
@@ -130,11 +127,39 @@ const member_code = () => {
       console.error('Error fetching data:', error)
     }
   }
+  useEffect(() => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer)
+    }
+    const timer = setTimeout(() => {
+      handleSearch()
+    }, 500)
+    setDebounceTimer(timer)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
 
   const handleLoadMore = () => {
     setInitialLoadCount(prevCount => prevCount + loadMoreCount)
   }
+  const fetchTransactionData = async () => {
+    const { memberCode } = router.query
+    const memberId = memberCode
+    console.log(memberId)
+    try {
+      const response = await axios.get('http://localhost:5000/api/protected/dispenseTransactions', {
+        params: { memberId },
+        withCredentials: true
+      })
 
+      // Assuming response.data is an array
+      if (response.data && response.data.length > 0) {
+        setDispenseData(response.data)
+      }
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching transaction data:', error)
+    }
+  }
   const handleSearch = async () => {
     if (searchQuery.length > 2) {
       try {
@@ -149,61 +174,71 @@ const member_code = () => {
       fetchData()
     }
   }
+
   const handleWeightChange = (productId, newWeight) => {
     setProducts(prevProducts => {
-      // Check if the product with the given productId already exists in the array
       const existingProductIndex = prevProducts.findIndex(product => product._id === productId)
-
       if (existingProductIndex !== -1) {
-        // If the product exists, update its weight
         return prevProducts.map((product, index) =>
           index === existingProductIndex ? { ...product, weight: newWeight } : product
         )
       } else {
-        // If the product doesn't exist, add it to the array
         return [...prevProducts, { _id: productId, weight: newWeight }]
       }
     })
-    console.log(products)
   }
+
   const handlePriceChange = (productId, newPrice) => {
     setProducts(prevProducts => {
-      // Check if the product with the given productId already exists in the array
       const existingProductIndex = prevProducts.findIndex(product => product._id === productId)
-
       if (existingProductIndex !== -1) {
-        // If the product exists, update its weight
         return prevProducts.map((product, index) =>
           index === existingProductIndex ? { ...product, price: newPrice } : product
         )
       } else {
-        // If the product doesn't exist, add it to the array
         return [...prevProducts, { _id: productId, price: newPrice }]
       }
     })
   }
 
-  // Function to calculate total weight
-  const calculateTotalWeight = () => {
-    let total = 0
+  const calculateTotals = () => {
+    let totalWeight = 0
+    let totalPrice = 0
     products.forEach(product => {
-      total += product.weight
+      totalWeight += product.weight || 0
+      totalPrice += product.price || 0
     })
-    setTotalWeight(total)
-  }
-  const calculateTotalPrice = () => {
-    let total = 0
-    products.forEach(product => {
-      total += product.price
-    })
-    setTotalPrice(total)
+    const estimate = memberData ? memberData.credits - totalPrice : 0
+    setTotalWeight(totalWeight.toFixed(4))
+    setTotalPrice(totalPrice.toFixed(2))
+    setEstimatedCredits(estimate)
   }
 
-  // Calculate total weight initially and whenever product weights change
   useEffect(() => {
-    calculateTotalWeight()
-    calculateTotalPrice()
-  }, [products])
+    calculateTotals()
+  }, [products, memberData])
+
+  const handleDispense = () => {
+    if (estimatedCredits < 0) {
+      handleOpenModal()
+    } else {
+      const { memberCode } = router.query
+      // Filter out products with weight zero and create a new array with only ID and weight information
+      const productsToSend = products
+        .filter(({ weight }) => weight > 0)
+        .map(({ _id, weight }) => ({
+          _id,
+          weight: Number(weight.toFixed(4)) // Round weight to 4 decimal places
+        }))
+      const queryString = `?products=${JSON.stringify(productsToSend)}`
+      // Convert the new array to a JSON string for the query string
+      router.push(`/dispense/checkout/${memberCode}${queryString}`)
+    }
+  }
+  const handleAddAsGift = () => {
+    const { memberCode } = router.query
+    router.push(`/dispense/checkout/${memberCode}`)
+  }
   if (!memberData) {
     return <p>Loading...</p>
   }
@@ -233,12 +268,12 @@ const member_code = () => {
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Link href={`/members/credit/${memberCodeVar}`} passHref>
-                      <Button size='large' variant='outlined' href='#text-buttons' color='success'>
+                      <Button size='large' variant='outlined' color='success'>
                         Add Credit
                       </Button>
                     </Link>
                     <Link href={`/members/profile/${memberCodeVar}`} passHref>
-                      <Button sx={{ ml: 5 }} size='large' variant='outlined' href='#text-buttons'>
+                      <Button sx={{ ml: 5 }} size='large' variant='outlined'>
                         View Profile
                       </Button>
                     </Link>
@@ -269,23 +304,20 @@ const member_code = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography variant='h6'>
-                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                      Estimated Balance:
-                    </Box>{' '}
-                    0
+                  <Typography
+                    variant='h6'
+                    sx={{ fontWeight: 600, color: estimatedCredits < 0 ? 'error.main' : 'text.primary' }}
+                  >
+                    <Box component='span'>Estimated Balance:</Box> {estimatedCredits}
                   </Typography>
                 </Grid>
-
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box>
-                    <Link href={`/members/credit/${memberCodeVar}`} passHref>
-                      <Button size='large' variant='contained' href='#text-buttons' color='success'>
-                        Dispense
-                      </Button>
-                    </Link>
+                    <Button size='large' variant='contained' color='success' onClick={handleDispense}>
+                      Dispense
+                    </Button>
                     <Link href={`/dispense`} passHref>
-                      <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons' color='error'>
+                      <Button sx={{ ml: 5 }} size='large' variant='contained' color='error'>
                         Cancel
                       </Button>
                     </Link>
@@ -334,7 +366,6 @@ const member_code = () => {
 
           {searchResult.length > 0 ? (
             searchResult.slice(0, initialLoadCount).map(product =>
-              // Only render Grid item if salePrice is defined and greater than zero
               product.salePrice && parseFloat(product.salePrice) > 0 ? (
                 <Grid item xs={12} sm={6} md={3} key={product._id}>
                   <CardProductDispense
@@ -372,13 +403,49 @@ const member_code = () => {
           <Card sx={{ p: 5 }}>
             <CardContent>
               <Typography variant='h5'>Dispense History</Typography>
-              <TableBasic data={tableData} />
+              <TableDispenseTransaction data={dispenseData} />
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4
+          }}
+        >
+          <Typography variant='h6' component='h2'>
+            Insufficient Balance
+          </Typography>
+          <Typography sx={{ mt: 2 }}>Make it as a gift?</Typography>
+          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              variant='contained'
+              color='success'
+              onClick={() => {
+                // Handle "Add as a gift" logic here
+                handleAddAsGift()
+              }}
+            >
+              Add as a Gift
+            </Button>
+            <Button variant='contained' color='error' onClick={handleCloseModal}>
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </DashboardWrapper>
   )
 }
 
-export default member_code
+export default MemberCode

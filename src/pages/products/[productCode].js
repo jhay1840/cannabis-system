@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles'
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
 import TableTransaction from 'src/views/tables/TableTransactions'
+import TableDispenseTransaction from 'src/views/tables/TableDispenseTransaction'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -66,6 +67,7 @@ const product_Code = () => {
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [productData, setProductData] = useState(null)
   const [productCode, setProductCode] = useState(null)
+  const [tableDispenseData, setTableDispenseData] = useState(null)
 
   const [openDialog, setOpenDialog] = useState(false) // State for dialog open/close
   const router = useRouter()
@@ -150,7 +152,26 @@ const product_Code = () => {
         console.error('Error fetching transaction data:', error)
       }
     }
+    const fetchDispenseTransactionData = async () => {
+      const { productCode } = router.query
+      const productId = productCode
 
+      try {
+        const response = await axios.get('http://localhost:5000/api/protected/dispenseTransactions', {
+          params: { productId },
+          withCredentials: true
+        })
+
+        // Assuming response.data is an array
+        if (response.data && response.data.length > 0) {
+          setTableDispenseData(response.data)
+        }
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching transaction data:', error)
+      }
+    }
+    fetchDispenseTransactionData()
     fetchTransactionData()
   }, [router.query.productCode])
 
@@ -301,7 +322,7 @@ const product_Code = () => {
             <CardContent>
               <Typography variant='h5'>Dispense History</Typography>
 
-              {/* <TableTransaction data={tableData} />  */}
+              <TableDispenseTransaction data={tableDispenseData} />
               <Typography variant='body1' sx={{ mt: 4 }}>
                 No data yet
               </Typography>

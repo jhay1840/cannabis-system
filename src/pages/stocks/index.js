@@ -102,9 +102,11 @@ const CardBasic = () => {
               Input the final inventory figures at the end of each day to accurately compare stock levels, ensuring
               precise inventory management and seamless business operations.
             </Typography>
-            <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
-              Close
-            </Button>
+            <Link href={`stocks/close/`} passHref>
+              <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
+                Close
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </Grid>
