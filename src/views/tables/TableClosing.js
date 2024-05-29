@@ -55,6 +55,7 @@ const TableClosing = ({ data, setTableData }) => {
                   onChange={e => handleInputChange(e, row._id, 'endOfDayQty')}
                   variant='outlined'
                   size='small'
+                  type='number'
                 />
               </TableCell>
               <TableCell>
@@ -63,9 +64,10 @@ const TableClosing = ({ data, setTableData }) => {
                   onChange={e => handleInputChange(e, row._id, 'startOfDayQty')}
                   variant='outlined'
                   size='small'
+                  type='number'
                 />
               </TableCell>
-              <TableCell>{row.endOfDayQty - row.startOfDayQty}</TableCell>
+              <TableCell>{row.startOfDayQty - row.endOfDayQty}</TableCell>
               <TableCell>
                 <Button variant='outlined' color='error' onClick={() => handleRemove(row._id)}>
                   Remove

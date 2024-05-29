@@ -10,15 +10,9 @@ import TabContext from '@mui/lab/TabContext'
 import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
 
-// ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import InformationOutline from 'mdi-material-ui/InformationOutline'
+import TabReportDaily from 'src/views/reports/TabReportDaily'
 
-// ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
-import TabAccount from 'src/views/account-settings/TabAccount'
-import TabSecurity from 'src/views/account-settings/TabSecurity'
+import DashboardWrapper from 'src/components/DashboardWrapper'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -43,13 +37,74 @@ const TabName = styled('span')(({ theme }) => ({
 
 const AccountSettings = () => {
   // ** State
-  const [value, setValue] = useState('account')
+  const [value, setValue] = useState('daily')
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
-  return <Card></Card>
+  return (
+    <DashboardWrapper>
+      <Card>
+        <TabContext value={value}>
+          <TabList
+            onChange={handleChange}
+            aria-label='report-settings tabs'
+            sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
+          >
+            <Tab
+              value='daily'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TabName>Daily</TabName>
+                </Box>
+              }
+            />
+            <Tab
+              value='weekly'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TabName>Weekly</TabName>
+                </Box>
+              }
+            />
+            <Tab
+              value='monthly'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TabName>Monthly</TabName>
+                </Box>
+              }
+            />
+            <Tab
+              value='annual'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TabName>Annual</TabName>
+                </Box>
+              }
+            />
+            <Tab
+              value='date-range'
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TabName>Custom Date</TabName>
+                </Box>
+              }
+            />
+          </TabList>
+
+          <TabPanel sx={{ p: 0 }} value='daily'>
+            <TabReportDaily />
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='weekly'></TabPanel>
+          <TabPanel sx={{ p: 0 }} value='monthly'></TabPanel>
+          <TabPanel sx={{ p: 0 }} value='annual'></TabPanel>
+          <TabPanel sx={{ p: 0 }} value='date-range'></TabPanel>
+        </TabContext>
+      </Card>
+    </DashboardWrapper>
+  )
 }
 
 export default AccountSettings

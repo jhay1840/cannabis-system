@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -17,12 +18,21 @@ import TableClosing from 'src/views/tables/TableClosing'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
-
+// Function to get today's date in YYYY-MM-DD format
+const getTodayDate = () => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 const CloseStock = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [tableData, setTableData] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const router = useRouter()
+  const [closeDate, setCloseDate] = useState(getTodayDate())
 
   useEffect(() => {
     if (searchQuery.length > 2) {
@@ -46,19 +56,36 @@ const CloseStock = () => {
   const handleSearch = event => {
     event.preventDefault()
     if (selectedProduct && !tableData.some(item => item._id === selectedProduct._id)) {
-      setTableData([...tableData, { ...selectedProduct, endOfDayQty: '', startOfDayQty: selectedProduct.stock || 0 }])
+      setTableData([
+        ...tableData,
+        { ...selectedProduct, endOfDayQty: selectedProduct.stock || 0, startOfDayQty: selectedProduct.stock || 0 }
+      ])
       setSelectedProduct(null) // Clear the selected product after adding
       setSearchQuery('') // Clear the search input after adding
     }
   }
   const handleSaveData = async () => {
     try {
+      // Check if any item is missing required data (empty fields)
+      if (tableData.some(item => !item.endOfDayQty) || tableData.some(item => !item.startOfDayQty)) {
+        alert('Please fill in all fields before saving.')
+        return // Exit function if any item is missing required data
+      }
+
+      // Check if endOfDayQty is less than startOfDayQty for any item
+      if (tableData.some(item => Number(item.endOfDayQty) > Number(item.startOfDayQty))) {
+        alert('End of day quantity cannot be greater than start of day quantity.')
+        return // Exit function if invalid data is found
+      }
+
       // Extracting required fields from tableData
-      const dataToSend = tableData.map(({ _id, endOfDayQty, startOfDayQty, usage }) => ({
-        _id,
+      const dataToSend = tableData.map(({ _id, name, endOfDayQty, startOfDayQty, usage }) => ({
+        productId: _id,
+        name,
         endOfDayQty,
         startOfDayQty,
-        usage
+        usage,
+        closeDate
       }))
 
       // Sending the extracted data to the backend
@@ -67,6 +94,7 @@ const CloseStock = () => {
       })
 
       console.log('Data saved successfully')
+      router.push(`/sales-report`)
     } catch (error) {
       console.error('Error saving data:', error)
     }
@@ -75,8 +103,23 @@ const CloseStock = () => {
   return (
     <DashboardWrapper>
       <Grid container spacing={6}>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Typography variant='h5'>Add Closing stocks</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Grid item xs={12} sx={{}}>
+            <TextField
+              fullWidth
+              label='Date'
+              type='date'
+              value={closeDate}
+              onChange={e => setCloseDate(e.target.value)}
+              InputProps={{
+                startAdornment: <InputAdornment position='start'></InputAdornment>
+              }}
+              required
+            />
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Card>

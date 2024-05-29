@@ -49,9 +49,10 @@ const WeeklyOverview = () => {
     dataLabels: { enabled: false },
     colors: [
       theme.palette.background.default,
-      theme.palette.background.default,
-      theme.palette.background.default,
       theme.palette.primary.main,
+      theme.palette.background.default,
+      theme.palette.background.default,
+
       theme.palette.background.default,
       theme.palette.background.default
     ],
