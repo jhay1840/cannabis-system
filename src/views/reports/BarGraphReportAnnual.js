@@ -4,36 +4,20 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
-
+import DotsVerticalIcon from 'mdi-material-ui/DotsVertical' // Assuming the correct import for DotsVertical icon
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const BarGraphReport = ({ data, closeDate }) => {
-  // ** Hook
+const BarGraphReportAnnual = ({ data, closeDate }) => {
+  // Hook
   const theme = useTheme()
 
-  // Function to get the day label for a given date
-  const getDayLabel = dateStr => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    const date = new Date(dateStr)
-    return days[date.getDay()]
-  }
-
-  // Initialize daily usage data for each day of the week
-  const dailyUsageData = [
-    { dayLabel: 'Monday', usage: 0 },
-    { dayLabel: 'Tuesday', usage: 0 },
-    { dayLabel: 'Wednesday', usage: 0 },
-    { dayLabel: 'Thursday', usage: 0 },
-    { dayLabel: 'Friday', usage: 0 },
-    { dayLabel: 'Saturday', usage: 0 },
-    { dayLabel: 'Sunday', usage: 0 }
-  ]
-
-  // Calculate usage per day based on startOfDayQty and endOfDayQty
-  data.forEach(item => {
-    const dayLabel = getDayLabel(item.closeDate)
-    const usage = item.startOfDayQty - item.endOfDayQty
-    dailyUsageData.find(day => day.dayLabel === dayLabel).usage += usage
+  // Prepare yearly usage data for the last 5 years
+  const currentYear = new Date(closeDate).getFullYear()
+  const yearlyUsageData = Array.from({ length: 5 }, (_, index) => {
+    const year = currentYear - 4 + index
+    const yearData = data.filter(item => new Date(item.closeDate).getFullYear() === year)
+    const usage = yearData.reduce((total, item) => total + (item.startOfDayQty - item.endOfDayQty), 0)
+    return { yearLabel: year.toString(), usage: usage || 0 }
   })
 
   const options = {
@@ -65,7 +49,7 @@ const BarGraphReport = ({ data, closeDate }) => {
     dataLabels: { enabled: false },
     colors: [theme.palette.primary.main],
     xaxis: {
-      categories: dailyUsageData.map(item => item.dayLabel),
+      categories: yearlyUsageData.map(item => item.yearLabel),
       tickPlacement: 'on',
       labels: { show: true, style: { fontSize: '12px' } },
       axisTicks: { show: true },
@@ -89,17 +73,14 @@ const BarGraphReport = ({ data, closeDate }) => {
   return (
     <Card>
       <CardHeader
-        title='This Week’s Usage'
+        title='Last 5 Years Usage'
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
         action={
-          <IconButton
-            size='small'
-            aria-label='settings'
-            className='card-more-options'
-            sx={{ color: 'text.secondary' }}
-          ></IconButton>
+          <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
+            <DotsVerticalIcon />
+          </IconButton>
         }
       />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
@@ -107,11 +88,11 @@ const BarGraphReport = ({ data, closeDate }) => {
           type='line'
           height={315}
           options={options}
-          series={[{ data: dailyUsageData.map(item => item.usage) }]}
+          series={[{ data: yearlyUsageData.map(item => item.usage) }]}
         />
       </CardContent>
     </Card>
   )
 }
 
-export default BarGraphReport
+export default BarGraphReportAnnual

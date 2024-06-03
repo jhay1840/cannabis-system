@@ -73,9 +73,11 @@ const CardBasic = () => {
               Access a detailed overview of your cannabis inventory, including quantities and product details, to
               facilitate inventory control and decision-making.
             </Typography>
-            <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
-              View
-            </Button>
+            <Link href={`/products`} passHref>
+              <Button variant='contained' sx={{ padding: theme => theme.spacing(1.75, 5.5) }}>
+                View
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </Grid>

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icons Imports
-import DotsVertical from 'mdi-material-ui/DotsVertical'
+// import DotsVertical from 'mdi-material-ui/DotsVertical'
 
 const CardStatsVertical = props => {
   // ** Props
@@ -21,7 +21,7 @@ const CardStatsVertical = props => {
             {icon}
           </Avatar>
           <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
-            <DotsVertical />
+            {/* <DotsVertical /> */}
           </IconButton>
         </Box>
         <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>{title}</Typography>

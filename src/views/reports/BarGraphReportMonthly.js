@@ -4,36 +4,53 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
-
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const BarGraphReport = ({ data, closeDate }) => {
+const BarGraphReportMonthly = ({ data, closeDate }) => {
   // ** Hook
   const theme = useTheme()
 
-  // Function to get the day label for a given date
-  const getDayLabel = dateStr => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  // Function to get the month label for a given date
+  const getMonthLabel = dateStr => {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]
     const date = new Date(dateStr)
-    return days[date.getDay()]
+    return months[date.getMonth()]
   }
 
-  // Initialize daily usage data for each day of the week
-  const dailyUsageData = [
-    { dayLabel: 'Monday', usage: 0 },
-    { dayLabel: 'Tuesday', usage: 0 },
-    { dayLabel: 'Wednesday', usage: 0 },
-    { dayLabel: 'Thursday', usage: 0 },
-    { dayLabel: 'Friday', usage: 0 },
-    { dayLabel: 'Saturday', usage: 0 },
-    { dayLabel: 'Sunday', usage: 0 }
+  // Initialize monthly usage data for each month of the year
+  const monthlyUsageData = [
+    { monthLabel: 'January', usage: 0 },
+    { monthLabel: 'February', usage: 0 },
+    { monthLabel: 'March', usage: 0 },
+    { monthLabel: 'April', usage: 0 },
+    { monthLabel: 'May', usage: 0 },
+    { monthLabel: 'June', usage: 0 },
+    { monthLabel: 'July', usage: 0 },
+    { monthLabel: 'August', usage: 0 },
+    { monthLabel: 'September', usage: 0 },
+    { monthLabel: 'October', usage: 0 },
+    { monthLabel: 'November', usage: 0 },
+    { monthLabel: 'December', usage: 0 }
   ]
 
-  // Calculate usage per day based on startOfDayQty and endOfDayQty
+  // Calculate usage per month based on startOfDayQty and endOfDayQty
   data.forEach(item => {
-    const dayLabel = getDayLabel(item.closeDate)
+    const monthLabel = getMonthLabel(item.closeDate)
     const usage = item.startOfDayQty - item.endOfDayQty
-    dailyUsageData.find(day => day.dayLabel === dayLabel).usage += usage
+    monthlyUsageData.find(month => month.monthLabel === monthLabel).usage += usage
   })
 
   const options = {
@@ -65,7 +82,7 @@ const BarGraphReport = ({ data, closeDate }) => {
     dataLabels: { enabled: false },
     colors: [theme.palette.primary.main],
     xaxis: {
-      categories: dailyUsageData.map(item => item.dayLabel),
+      categories: monthlyUsageData.map(item => item.monthLabel),
       tickPlacement: 'on',
       labels: { show: true, style: { fontSize: '12px' } },
       axisTicks: { show: true },
@@ -89,7 +106,7 @@ const BarGraphReport = ({ data, closeDate }) => {
   return (
     <Card>
       <CardHeader
-        title='This Week’s Usage'
+        title='This Year’s Usage'
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
@@ -107,11 +124,11 @@ const BarGraphReport = ({ data, closeDate }) => {
           type='line'
           height={315}
           options={options}
-          series={[{ data: dailyUsageData.map(item => item.usage) }]}
+          series={[{ data: monthlyUsageData.map(item => item.usage) }]}
         />
       </CardContent>
     </Card>
   )
 }
 
-export default BarGraphReport
+export default BarGraphReportMonthly

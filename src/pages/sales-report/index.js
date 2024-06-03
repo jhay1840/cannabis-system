@@ -11,11 +11,15 @@ import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
 
 import TabReportDaily from 'src/views/reports/TabReportDaily'
+import TabReportWeekly from 'src/views/reports/TabReportWeekly'
+import TabReportMonthly from 'src/views/reports/TabReportMonthly'
 
 import DashboardWrapper from 'src/components/DashboardWrapper'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import TabReportAnnual from 'src/views/reports/TabReportAnnual'
+import TabReportCustom from 'src/views/reports/TabReportCustom'
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
@@ -97,10 +101,19 @@ const AccountSettings = () => {
           <TabPanel sx={{ p: 0 }} value='daily'>
             <TabReportDaily />
           </TabPanel>
-          <TabPanel sx={{ p: 0 }} value='weekly'></TabPanel>
-          <TabPanel sx={{ p: 0 }} value='monthly'></TabPanel>
-          <TabPanel sx={{ p: 0 }} value='annual'></TabPanel>
-          <TabPanel sx={{ p: 0 }} value='date-range'></TabPanel>
+          <TabPanel sx={{ p: 0 }} value='weekly'>
+            <TabReportWeekly />
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='monthly'>
+            <TabReportMonthly />
+          </TabPanel>
+
+          <TabPanel sx={{ p: 0 }} value='annual'>
+            <TabReportAnnual />
+          </TabPanel>
+          <TabPanel sx={{ p: 0 }} value='date-range'>
+            <TabReportCustom />
+          </TabPanel>
         </TabContext>
       </Card>
     </DashboardWrapper>

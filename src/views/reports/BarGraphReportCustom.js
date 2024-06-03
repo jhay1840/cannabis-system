@@ -7,33 +7,50 @@ import CardContent from '@mui/material/CardContent'
 
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const BarGraphReport = ({ data, closeDate }) => {
-  // ** Hook
+const BarGraphReportCustom = ({ data, startDate, endDate }) => {
   const theme = useTheme()
 
-  // Function to get the day label for a given date
-  const getDayLabel = dateStr => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  // Function to format the date to "DD MMM" format
+  const formatDate = dateStr => {
     const date = new Date(dateStr)
-    return days[date.getDay()]
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'short' })
+    return `${day} ${month}`
+  }
+  // Function to generate date labels for the given date range
+  const getDatesInRange = (start, end) => {
+    const dateArray = []
+    let currentDate = new Date(start)
+    const endDateTime = new Date(end).getTime()
+
+    while (currentDate <= endDateTime) {
+      dateArray.push(new Date(currentDate).toISOString().split('T')[0])
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return dateArray
   }
 
-  // Initialize daily usage data for each day of the week
-  const dailyUsageData = [
-    { dayLabel: 'Monday', usage: 0 },
-    { dayLabel: 'Tuesday', usage: 0 },
-    { dayLabel: 'Wednesday', usage: 0 },
-    { dayLabel: 'Thursday', usage: 0 },
-    { dayLabel: 'Friday', usage: 0 },
-    { dayLabel: 'Saturday', usage: 0 },
-    { dayLabel: 'Sunday', usage: 0 }
-  ]
+  // Generate date labels
+  const dateLabels = getDatesInRange(startDate, endDate).map(date => {
+    const dateObj = new Date(date)
+    return `${dateObj.getDate()} ${dateObj.toLocaleString('default', { month: 'short' })}`
+  })
 
-  // Calculate usage per day based on startOfDayQty and endOfDayQty
+  // Initialize daily usage data with zeros for each date label
+  const dailyUsageData = dateLabels.map(label => ({ label, usage: 0 }))
+
+  // Calculate usage for each day based on data items
   data.forEach(item => {
-    const dayLabel = getDayLabel(item.closeDate)
-    const usage = item.startOfDayQty - item.endOfDayQty
-    dailyUsageData.find(day => day.dayLabel === dayLabel).usage += usage
+    const itemDate = formatDate(item.closeDate)
+    const dataIndex = dateLabels.findIndex(date => date === itemDate)
+    console.log(itemDate)
+    console.log(dateLabels)
+
+    if (dataIndex !== -1) {
+      const usage = item.startOfDayQty - item.endOfDayQty
+      dailyUsageData[dataIndex].usage += usage
+    }
   })
 
   const options = {
@@ -65,7 +82,7 @@ const BarGraphReport = ({ data, closeDate }) => {
     dataLabels: { enabled: false },
     colors: [theme.palette.primary.main],
     xaxis: {
-      categories: dailyUsageData.map(item => item.dayLabel),
+      categories: dateLabels,
       tickPlacement: 'on',
       labels: { show: true, style: { fontSize: '12px' } },
       axisTicks: { show: true },
@@ -89,7 +106,7 @@ const BarGraphReport = ({ data, closeDate }) => {
   return (
     <Card>
       <CardHeader
-        title='This Week’s Usage'
+        title={`Usage (${startDate} - ${endDate})`}
         titleTypographyProps={{
           sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
         }}
@@ -114,4 +131,4 @@ const BarGraphReport = ({ data, closeDate }) => {
   )
 }
 
-export default BarGraphReport
+export default BarGraphReportCustom
