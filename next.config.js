@@ -15,5 +15,14 @@ module.exports = {
     config.resolve.alias.canvas = false
 
     return config
+  },
+  async redirects() {
+    return [
+      {
+        source: '/profile/:id', // Source path pattern
+        destination: '/members/profile/:id', // Destination path pattern
+        permanent: true // This sets the redirect as permanent (HTTP 301)
+      }
+    ]
   }
 }

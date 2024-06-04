@@ -16,10 +16,11 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 
-// ** Demo Components Imports
+// Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
 import TableMembersCredit from 'src/views/tables/TableMembersCredit'
 import TableDispenseTransaction from 'src/views/tables/TableDispenseTransaction'
+import QRCodeComponent from 'src/views/account-settings/QRCodeComponent'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
@@ -148,7 +149,8 @@ const member_code = () => {
                 </Grid>
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ImgStyled src={imgSrc} alt='Profile Pic' />
+                    {/* <ImgStyled src={imgSrc} alt='Profile Pic' /> */}
+                    <QRCodeComponent qrLink={`/members/profile/${memberCodeVar}`} />
                     <Box>
                       <Typography variant='h6'>
                         {memberData.firstName} {memberData.lastName}

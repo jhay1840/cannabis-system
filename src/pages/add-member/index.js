@@ -47,6 +47,10 @@ const Members = () => {
   const [gender, setGender] = useState('')
   const [receiveUpdates, setReceiveUpdates] = useState(false)
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false)
+  const [agreement, setAgreement] = useState(false)
+  const [idType, setIdType] = useState('')
+  const [nationality, setNationality] = useState('')
+  const [consumption, setConsumption] = useState('')
 
   const {
     register,
@@ -78,7 +82,6 @@ const Members = () => {
       return
     } else {
       try {
-        // Assuming you have a registration endpoint like /api/register
         const registrationData = {
           firstName,
           lastName,
@@ -90,7 +93,11 @@ const Members = () => {
           userRole,
           gender,
           subscribeToNewsletter,
-          receiveUpdates
+          receiveUpdates,
+          nationality,
+          agreement,
+          idType,
+          consumption
           // Add other fields as needed
         }
 
@@ -115,20 +122,6 @@ const Members = () => {
             signatureFormData.append('upload', signatureBlob, 'signature.png')
 
             await axios.post(`http://localhost:5000/api/upload/signature/${userId}`, signatureFormData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              withCredentials: true
-            })
-          }
-
-          // Upload PDF file
-          if (userRole === 'member' && data.upload && data.upload.length > 0) {
-            const pdfFormData = new FormData()
-            const pdfFile = data.upload[0]
-            pdfFormData.append('upload', pdfFile)
-
-            await axios.post(`http://localhost:5000/api/upload/contract/${userId}`, pdfFormData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               },
@@ -256,6 +249,45 @@ const Members = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label='Nationality'
+                      placeholder='Nationality'
+                      value={nationality}
+                      onChange={e => setNationality(e.target.value)}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id='form-layouts-separator-select-label'>ID Type</InputLabel>
+                      <Select
+                        label='Role'
+                        defaultValue='ID'
+                        id='form-layouts-separator-select'
+                        labelId='form-layouts-separator-select-label'
+                        value={idType}
+                        onChange={e => setIdType(e.target.value)}
+                        required
+                      >
+                        <MenuItem value='ID'>ID</MenuItem>
+                        <MenuItem value='Passport'>Passsport</MenuItem>
+                        <MenuItem value="Driver's license">Driver's license</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label='Please add your [ID] number here'
+                      placeholder='Please add your [ID] number here'
+                      value={idOrPassportNumber}
+                      onChange={e => setIdOrPassportNumber(e.target.value)}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
                     <FormControl fullWidth>
                       <InputLabel id='form-layouts-separator-select-label'>User Role</InputLabel>
                       <Select
@@ -272,34 +304,28 @@ const Members = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-
                   <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      label='ID or Passport Number'
-                      placeholder='Enter ID or Passport Number'
-                      value={idOrPassportNumber}
-                      onChange={e => setIdOrPassportNumber(e.target.value)}
-                      required
-                    />
+                    <FormControl fullWidth>
+                      <InputLabel id='form-layouts-separator-select-label'>
+                        What is your estimated consumption from Born High per month?
+                      </InputLabel>
+                      <Select
+                        label='Role'
+                        defaultValue='20g'
+                        id='form-layouts-separator-select'
+                        labelId='form-layouts-separator-select-label'
+                        value={consumption}
+                        onChange={e => setConsumption(e.target.value)}
+                        required
+                      >
+                        <MenuItem value='20g'>20g</MenuItem>
+                        <MenuItem value='50g'>50g</MenuItem>
+                        <MenuItem value='100g'>100g</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <Divider sx={{ marginBottom: 0 }} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                      2. Contract
-                    </Typography>
-
-                    <input
-                      {...register('upload', {
-                        required: userRole === 'member' ? 'File is required' : false
-                      })}
-                      type='file'
-                      accept='.pdf'
-                    />
-
-                    {errors.upload && <p style={{ color: 'red' }}>{errors.upload.message}</p>}
                   </Grid>
 
                   <Grid item xs={12}>
@@ -313,6 +339,15 @@ const Members = () => {
                         <img src={signatureImage} alt='Signature Preview' />
                       </div>
                     )}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      label='Do you agree to the terms and conditions as set out by the user agreement?'
+                      control={<Checkbox name='checkbox-agreement' />}
+                      checked={agreement}
+                      onChange={() => setAgreement(!agreement)}
+                      sx={{ '& .MuiButtonBase-root': { paddingTop: 0, paddingBottom: 0 } }}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <FormControlLabel
