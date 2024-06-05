@@ -143,8 +143,8 @@ const LoginPage = () => {
         const userType = response.data
         if (userType === 'superadmin' || userType === 'admin') {
           router.push('/')
-        } else if (userType === 'user') {
-          router.push('/')
+        } else if (userType === 'member') {
+          router.push('/user')
         }
       } catch (err) {
         console.error(err)

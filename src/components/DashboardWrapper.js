@@ -15,6 +15,9 @@ const DashboardWrapper = ({ children }) => {
         if (response.data == 'false') {
           router.push('/login')
         }
+        if (response.data == 'member') {
+          router.push('/user')
+        }
       } catch (error) {
         console.error('Error checking authentication:', error)
         router.push('/login')

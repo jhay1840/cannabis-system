@@ -45,13 +45,12 @@ const ContentWrapper = styled('main')(({ theme }) => ({
   }
 }))
 
-const VerticalLayout = props => {
+const MemberLayout = props => {
   // ** Props
   const { settings, children, scrollToTop } = props
 
   // ** Vars
   const { contentWidth } = settings
-
   const navWidth = themeConfig.navigationSize
 
   // ** States
@@ -107,4 +106,4 @@ const VerticalLayout = props => {
   )
 }
 
-export default VerticalLayout
+export default MemberLayout
