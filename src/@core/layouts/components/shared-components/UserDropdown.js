@@ -1,5 +1,6 @@
 // ** React Imports
 import { useState, Fragment } from 'react'
+import axios from 'axios'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -63,7 +64,14 @@ const UserDropdown = () => {
       color: 'text.secondary'
     }
   }
-
+  const handleLogout = async () => {
+    try {
+      await axios.get('http://localhost:5000/logout', { withCredentials: true })
+      router.push('/login')
+    } catch (error) {
+      console.error('Error during logout:', error)
+    }
+  }
   return (
     <Fragment>
       <Badge
@@ -144,7 +152,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem> */}
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

@@ -6,7 +6,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 // ** Layout Imports
 import MemberLayout from 'src/@core/layouts/MemberLayout'
 // ** Navigation Imports
-import VerticalNavItems from 'src/navigation/vertical'
+import MemberVerticalNavItems from 'src/navigation/memberVertical'
 
 // ** Component Import
 
@@ -44,7 +44,7 @@ const MemberWrapper = ({ children }) => {
       hidden={hidden}
       settings='boxed'
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
+      verticalNavItems={MemberVerticalNavItems()} // Navigation Items
       verticalAppBarContent={(
         props // AppBar Content
       ) => (
@@ -55,7 +55,9 @@ const MemberWrapper = ({ children }) => {
           toggleNavVisibility={props.toggleNavVisibility}
         />
       )}
-    ></MemberLayout>
+    >
+      {children}
+    </MemberLayout>
   )
 }
 
