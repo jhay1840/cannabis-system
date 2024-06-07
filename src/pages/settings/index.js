@@ -11,14 +11,10 @@ import { styled } from '@mui/material/styles'
 import MuiTab from '@mui/material/Tab'
 
 // ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import InformationOutline from 'mdi-material-ui/InformationOutline'
+import Cog from 'mdi-material-ui/Cog'
 
 // ** Demo Tabs Imports
-import TabInfo from 'src/views/account-settings/TabInfo'
-import TabAccount from 'src/views/account-settings/TabAccount'
-import TabSecurity from 'src/views/account-settings/TabSecurity'
+import TabSettings from 'src/views/settings/TabSettings'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
@@ -41,7 +37,7 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-const AccountSettings = () => {
+const Settings = () => {
   // ** State
   const [value, setValue] = useState('account')
 
@@ -49,7 +45,31 @@ const AccountSettings = () => {
     setValue(newValue)
   }
 
-  return <Card></Card>
+  return (
+    <Card>
+      <TabContext value={value}>
+        <TabList
+          onChange={handleChange}
+          aria-label='account-settings tabs'
+          sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
+        >
+          <Tab
+            value='account'
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Cog />
+                <TabName>Settings</TabName>
+              </Box>
+            }
+          />
+        </TabList>
+
+        <TabPanel sx={{ p: 0 }} value='account'>
+          <TabSettings />
+        </TabPanel>
+      </TabContext>
+    </Card>
+  )
 }
 
-export default AccountSettings
+export default Settings

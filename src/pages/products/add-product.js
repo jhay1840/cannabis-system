@@ -55,6 +55,8 @@ const addProduct = () => {
   const [description, setDescription] = useState('')
   const [medicalDescription, setMedicalDescription] = useState('')
   const [category, setCategory] = useState('')
+  const [cannabisCategories, setCannabisCategories] = useState([])
+  const [cannabisTypes, setCannabisTypes] = useState([])
   const [productImage, setProductImage] = useState('')
   const [productImageUrl, setProductImageUrl] = useState('first')
   const [salePrice, setSalePrice] = useState('')
@@ -142,6 +144,22 @@ const addProduct = () => {
     }
     // Call the async function
   }, [productImageUrl])
+  useEffect(() => {
+    const fetchCat = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/protected/getCannabisCategories', {
+          withCredentials: true
+        })
+        const data = response.data
+        setCannabisCategories(data.categories)
+        setCannabisTypes(data.types)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchCat()
+  }, [])
 
   //| Helper function to convert data URI to Blob
   const dataURItoBlob = dataURI => {
@@ -217,19 +235,23 @@ const addProduct = () => {
                     <FormControl fullWidth>
                       <InputLabel>Type</InputLabel>
                       <Select label='Type' value={type} onChange={e => setType(e.target.value)} required>
-                        <MenuItem value='Indica'>Indica</MenuItem>
-                        <MenuItem value='Sativa'>Sativa</MenuItem>
-                        <MenuItem value='Hybrid'>Hybrid</MenuItem>
+                        {cannabisTypes.map((type, index) => (
+                          <MenuItem key={index} value={type}>
+                            {type}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={6}>
                     <FormControl fullWidth>
                       <InputLabel>Category</InputLabel>
-                      <Select label='Type' value={category} onChange={e => setCategory(e.target.value)} required>
-                        <MenuItem value='test'>test</MenuItem>
-                        <MenuItem value='test2'>tes2</MenuItem>
-                        <MenuItem value='test3'>test3</MenuItem>
+                      <Select label='Category' value={category} onChange={e => setCategory(e.target.value)} required>
+                        {cannabisCategories.map((category, index) => (
+                          <MenuItem key={index} value={category}>
+                            {category}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>

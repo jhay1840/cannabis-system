@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashboardWrapper from 'src/components/DashboardWrapper'
 import Signature from 'src/components/Signature'
 import PDFViewerComponent from 'src/components/PDFViewer'
@@ -49,6 +49,9 @@ const Members = () => {
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false)
   const [agreement, setAgreement] = useState(false)
   const [idType, setIdType] = useState('')
+  const [idTypes, setIdTypes] = useState([])
+  const [estConsump, setEstConsump] = useState([])
+
   const [nationality, setNationality] = useState('')
   const [consumption, setConsumption] = useState('')
 
@@ -157,6 +160,23 @@ const Members = () => {
     }
     return new Blob([ab], { type: mimeString })
   }
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/protected/getMemberOptions', {
+          withCredentials: true
+        })
+        const data = response.data
+        setIdTypes(data.idTypes)
+        setEstConsump(data.estimatedConsumption)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchOptions()
+  }, [])
 
   return (
     <DashboardWrapper>
@@ -270,9 +290,11 @@ const Members = () => {
                         onChange={e => setIdType(e.target.value)}
                         required
                       >
-                        <MenuItem value='ID'>ID</MenuItem>
-                        <MenuItem value='Passport'>Passsport</MenuItem>
-                        <MenuItem value="Driver's license">Driver's license</MenuItem>
+                        {idTypes.map((types, index) => (
+                          <MenuItem key={index} value={types}>
+                            {types}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -318,9 +340,11 @@ const Members = () => {
                         onChange={e => setConsumption(e.target.value)}
                         required
                       >
-                        <MenuItem value='20g'>20g</MenuItem>
-                        <MenuItem value='50g'>50g</MenuItem>
-                        <MenuItem value='100g'>100g</MenuItem>
+                        {estConsump.map((est, index) => (
+                          <MenuItem key={index} value={est}>
+                            {est}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>

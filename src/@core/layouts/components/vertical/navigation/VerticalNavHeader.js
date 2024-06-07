@@ -50,7 +50,7 @@ const VerticalNavHeader = props => {
       ) : (
         <Link href='/' passHref>
           <StyledLink>
-            <img src='/images/logos/bornhigh.svg' alt='bornhigh logo' />
+            <img src={themeConfig.logoPath} alt='bornhigh logo' />
             {/* <HeaderTitle variant='h6' sx={{ ml: 3 }}>
               {themeConfig.templateName}
             </HeaderTitle> */}
