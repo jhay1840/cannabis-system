@@ -66,7 +66,6 @@ const member_code = () => {
   const [tableDataCredits, setTableDataCredits] = useState([])
   const [dispenseData, setDispenseData] = useState([])
 
-  const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
   const [memberCodeVar, setMemberCodeVar] = useState(null)
 
@@ -83,7 +82,7 @@ const member_code = () => {
       })
 
       // Assuming response.data is an array
-      if (response.data && response.data.length > 0) {
+      if (response.data) {
         setTableDataCredits(response.data)
       }
       console.log(response.data)
@@ -102,7 +101,7 @@ const member_code = () => {
       })
 
       // Assuming response.data is an array
-      if (response.data && response.data.length > 0) {
+      if (response.data) {
         setDispenseData(response.data)
       }
       console.log(response.data)
@@ -167,9 +166,11 @@ const member_code = () => {
                         Add Credit
                       </Button>
                     </Link>
-                    <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons'>
-                      Edit Profile
-                    </Button>
+                    <Link href={`/members/profile/edit/${memberCodeVar}`} passHref>
+                      <Button sx={{ ml: 5 }} size='large' variant='contained' href='#text-buttons'>
+                        Edit Profile
+                      </Button>
+                    </Link>
                   </Box>
                 </Grid>
                 <Grid item xs={6}>
@@ -185,7 +186,7 @@ const member_code = () => {
                     <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
                       Expiry:
                     </Box>{' '}
-                    {formatDate(memberData.userInfo[0]?.expiryDate)}
+                    {formatDate(memberData.expiryDate)}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -232,7 +233,23 @@ const member_code = () => {
                 <Grid item xs={6}>
                   <Typography variant='body1'>
                     <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-                      Passport Number:
+                      Nationality:
+                    </Box>{' '}
+                    {memberData.nationality}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      ID Type:
+                    </Box>{' '}
+                    {memberData.idType}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      ID Number:
                     </Box>{' '}
                     {memberData.idNumber}
                   </Typography>
@@ -251,6 +268,14 @@ const member_code = () => {
                       Gender:
                     </Box>{' '}
                     {memberData.gender}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant='body1'>
+                    <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                      Estimated Consumption:
+                    </Box>{' '}
+                    {memberData.consumption}
                   </Typography>
                 </Grid>
               </Grid>
