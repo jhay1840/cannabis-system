@@ -15,6 +15,8 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 
 // Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
@@ -135,6 +137,9 @@ const member_code = () => {
   if (!memberData) {
     return <p>Loading...</p>
   }
+  const expiryDate = memberData.expiryDate
+  const isExpired = expiryDate && new Date(expiryDate) < new Date()
+  const expiryWarning = !expiryDate ? 'Expiry date not set' : isExpired ? 'Membership expired' : ''
 
   return (
     <DashboardWrapper>
@@ -172,6 +177,13 @@ const member_code = () => {
                       </Button>
                     </Link>
                   </Box>
+                </Grid>
+                <Grid item xs={12}>
+                  {expiryWarning && (
+                    <Alert severity='warning'>
+                      <AlertTitle>{expiryWarning}</AlertTitle>
+                    </Alert>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant='body1'>

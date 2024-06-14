@@ -18,7 +18,11 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
-import { Magnify } from 'mdi-material-ui'
+import { Magnify, Close } from 'mdi-material-ui'
+
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
+import IconButton from '@mui/material/IconButton'
 
 // ** Custom Components Imports
 import CardProductDispense from 'src/views/cards/CardProductDispense'
@@ -84,6 +88,7 @@ const MemberCode = () => {
   const [initialLoadCount, setInitialLoadCount] = useState(6)
   const [loadMoreCount, setLoadMoreCount] = useState(6)
   const [debounceTimer, setDebounceTimer] = useState(null)
+  const [openAlert, setOpenAlert] = useState(false)
 
   const [openModal, setOpenModal] = useState(false) // State for modal visibility
 
@@ -221,6 +226,8 @@ const MemberCode = () => {
   const handleDispense = () => {
     if (estimatedCredits < 0) {
       handleOpenModal()
+    } else if (products.every(product => product.weight === 0)) {
+      setOpenAlert(true)
     } else {
       const { memberCode } = router.query
       // Filter out products with weight zero and create a new array with only ID and weight information
@@ -235,6 +242,7 @@ const MemberCode = () => {
       router.push(`/dispense/checkout/${memberCode}${queryString}`)
     }
   }
+
   const handleAddAsGift = () => {
     const { memberCode } = router.query
     router.push(`/dispense/checkout/${memberCode}`)
@@ -242,7 +250,9 @@ const MemberCode = () => {
   if (!memberData) {
     return <p>Loading...</p>
   }
-
+  const expiryDate = memberData.expiryDate
+  const isExpired = expiryDate && new Date(expiryDate) < new Date()
+  const expiryWarning = !expiryDate ? 'Expiry date not set' : isExpired ? 'Membership expired' : ''
   return (
     <DashboardWrapper>
       <Grid container spacing={6}>
@@ -261,7 +271,7 @@ const MemberCode = () => {
                         {memberData.firstName} {memberData.lastName}
                       </Typography>
                       <Typography variant='subtitle1'>{calculateAge(memberData.dateOfBirth)} y.o</Typography>
-                      <Typography variant='body2'>Expiry: {formatDate(memberData.userInfo[0]?.expiryDate)}</Typography>
+                      <Typography variant='body2'>Expiry: {formatDate(memberData.expiryDate)}</Typography>
                     </Box>
                   </Box>
                 </Grid>
@@ -311,6 +321,13 @@ const MemberCode = () => {
                     <Box component='span'>Estimated Balance:</Box> {estimatedCredits}
                   </Typography>
                 </Grid>
+                <Grid item xs={12}>
+                  {expiryWarning && (
+                    <Alert severity='warning'>
+                      <AlertTitle>{expiryWarning}</AlertTitle>
+                    </Alert>
+                  )}
+                </Grid>
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box>
                     <Button size='large' variant='contained' color='success' onClick={handleDispense}>
@@ -327,7 +344,21 @@ const MemberCode = () => {
             </CardContent>
           </Card>
         </Grid>
-
+        {openAlert ? (
+          <Grid item xs={12} sx={{ mb: 3 }}>
+            <Alert
+              severity='error'
+              sx={{ '& a': { fontWeight: 400 } }}
+              action={
+                <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
+                  <Close fontSize='inherit' />
+                </IconButton>
+              }
+            >
+              <AlertTitle>Please add dispensed products</AlertTitle>
+            </Alert>
+          </Grid>
+        ) : null}
         <Grid container spacing={6} sx={{ pl: 6, pt: 4 }}>
           <Grid item xs={6}></Grid>
           <Grid item xs={12}>
