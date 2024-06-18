@@ -33,6 +33,8 @@ const TabSettings = () => {
   const [isSaved, setIsSaved] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [appName, setAppName] = useState('')
+  // const [appLink, setAppLink] = useState('')
+
   const [idType, setIdType] = useState('')
   const [idTypes, setIdTypes] = useState([])
   const [consumption, setConsumption] = useState('')
@@ -50,6 +52,7 @@ const TabSettings = () => {
           withCredentials: true
         })
         const settings = response.data
+        // setAppLink(settings.appDomainLink)
         setAppName(settings.appName)
         setIdTypes(settings.idTypes)
         setEstimatedConsumption(settings.estimatedConsumption)
@@ -78,6 +81,7 @@ const TabSettings = () => {
   const handleSaveChanges = async () => {
     const settingsData = {
       appName,
+      appLink,
       idTypes,
       estimatedConsumption,
       cannabisCategories,
@@ -119,6 +123,15 @@ const TabSettings = () => {
                   onChange={e => setAppName(e.target.value)}
                 />
               </Grid>
+              {/* <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label='App URL'
+                  placeholder='http://localhost:3000'
+                  value={appLink}
+                  onChange={e => setAppLink(e.target.value)}
+                />
+              </Grid> */}
               <Grid item xs={12}>
                 <Typography variant='subtitle1'>ID Types</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>

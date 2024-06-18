@@ -14,6 +14,7 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
+import Link from 'next/link'
 
 // ** Icons Imports
 import CogOutline from 'mdi-material-ui/CogOutline'
@@ -96,7 +97,7 @@ const UserDropdown = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Box sx={{ pt: 2, pb: 3, px: 4 }}>
+        {/* <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Badge
               overlap='circular'
@@ -112,13 +113,15 @@ const UserDropdown = () => {
               </Typography>
             </Box>
           </Box>
-        </Box>
-        <Divider sx={{ mt: 0, mb: 1 }} />
+        </Box> */}
+        {/* <Divider sx={{ mt: 0, mb: 1 }} /> */}
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <AccountOutline sx={{ marginRight: 2 }} />
-            Profile
-          </Box>
+          <Link href={'account-settings'}>
+            <Box sx={styles}>
+              <AccountOutline sx={{ marginRight: 2 }} />
+              Profile
+            </Box>
+          </Link>
         </MenuItem>
         {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
@@ -134,10 +137,12 @@ const UserDropdown = () => {
         </MenuItem> */}
         {/* <Divider /> */}
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CogOutline sx={{ marginRight: 2 }} />
-            Settings
-          </Box>
+          <Link href={'settings'}>
+            <Box sx={styles}>
+              <CogOutline sx={{ marginRight: 2 }} />
+              Settings
+            </Box>
+          </Link>
         </MenuItem>
         {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>

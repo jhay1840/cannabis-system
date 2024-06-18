@@ -67,12 +67,28 @@ const member_code = () => {
   const [tableData, setTableData] = useState([])
   const [tableDataCredits, setTableDataCredits] = useState([])
   const [dispenseData, setDispenseData] = useState([])
+  const [appLink, setAppLink] = useState('')
 
   const [memberData, setMemberData] = useState(null)
   const [memberCodeVar, setMemberCodeVar] = useState(null)
 
   const router = useRouter()
 
+  // useEffect(() => {
+  //   const fetchSettings = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:5000/api/protected/getSettings', {
+  //         withCredentials: true
+  //       })
+  //       const settings = response.data
+  //       setAppLink(settings.appDomainLink)
+  //     } catch (error) {
+  //       console.error('Error fetching settings:', error)
+  //     }
+  //   }
+
+  //   fetchSettings()
+  // }, [])
   const fetchTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -132,11 +148,21 @@ const member_code = () => {
     fetchMemberData()
     fetchTransactionData()
     fetchDispenseTransactionData()
+
+    const getCurrentDomain = () => {
+      if (typeof window !== 'undefined') {
+        return window.location.origin
+      }
+      return ''
+    }
+
+    setAppLink(getCurrentDomain())
   }, [router.query.memberCode])
 
   if (!memberData) {
     return <p>Loading...</p>
   }
+
   const expiryDate = memberData.expiryDate
   const isExpired = expiryDate && new Date(expiryDate) < new Date()
   const expiryWarning = !expiryDate ? 'Expiry date not set' : isExpired ? 'Membership expired' : ''
@@ -154,7 +180,7 @@ const member_code = () => {
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     {/* <ImgStyled src={imgSrc} alt='Profile Pic' /> */}
-                    <QRCodeComponent qrLink={`/members/profile/${memberCodeVar}`} />
+                    <QRCodeComponent qrLink={`${appLink}/members/profile/${memberCodeVar}`} />
                     <Box>
                       <Typography variant='h6'>
                         {memberData.firstName} {memberData.lastName}

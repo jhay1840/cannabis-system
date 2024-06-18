@@ -29,6 +29,7 @@ import CardProductDispense from 'src/views/cards/CardProductDispense'
 import TableBasic from 'src/views/tables/TableMembers'
 import DashboardWrapper from 'src/components/DashboardWrapper'
 import TableDispenseTransaction from 'src/views/tables/TableDispenseTransaction'
+import QRCodeComponent from 'src/views/account-settings/QRCodeComponent'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 150,
@@ -89,6 +90,7 @@ const MemberCode = () => {
   const [loadMoreCount, setLoadMoreCount] = useState(6)
   const [debounceTimer, setDebounceTimer] = useState(null)
   const [openAlert, setOpenAlert] = useState(false)
+  const [appLink, setAppLink] = useState('')
 
   const [openModal, setOpenModal] = useState(false) // State for modal visibility
 
@@ -117,6 +119,14 @@ const MemberCode = () => {
       fetchMemberData()
       fetchTransactionData()
     }
+    const getCurrentDomain = () => {
+      if (typeof window !== 'undefined') {
+        return window.location.origin
+      }
+      return ''
+    }
+
+    setAppLink(getCurrentDomain())
   }, [router.query.memberCode])
 
   useEffect(() => {
@@ -265,7 +275,7 @@ const MemberCode = () => {
                 </Grid>
                 <Grid item xs={6} sx={{ marginTop: 4.8, marginBottom: 3 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ImgStyled src={imgSrc} alt='Profile Pic' />
+                    <QRCodeComponent qrLink={`${appLink}/members/profile/${memberCodeVar}`} />
                     <Box>
                       <Typography variant='h6'>
                         {memberData.firstName} {memberData.lastName}
@@ -365,7 +375,7 @@ const MemberCode = () => {
             <Card>
               <CardContent>
                 <Grid container spacing={5}>
-                  <Grid item xs={6}>
+                  <Grid item xs={12}>
                     <TextField
                       fullWidth
                       label='Search Product'
@@ -381,15 +391,15 @@ const MemberCode = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  {/* <Grid item xs={6}>
                     <FormControl fullWidth>
                       <InputLabel>Category</InputLabel>
                       <Select label='Category' value='' onChange={() => {}} required>
                         <MenuItem value=''>Select</MenuItem>
-                        {/* Add menu items dynamically */}
+                       
                       </Select>
                     </FormControl>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </CardContent>
             </Card>
