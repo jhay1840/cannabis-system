@@ -113,8 +113,8 @@ const LoginPage = () => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    console.log('Process Environment:', process.env)
-    console.log('API URL:', process.env.REACT_APP_API)
+
+    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)
     const success = await login(email, password)
 
     if (success) {
