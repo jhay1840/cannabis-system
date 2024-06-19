@@ -23,7 +23,7 @@ const MemberWrapper = ({ children }) => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/public/user-type', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`, {
           withCredentials: true
         })
         console.log(response.data)

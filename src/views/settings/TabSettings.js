@@ -48,7 +48,7 @@ const TabSettings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/getSettings', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getSettings`, {
           withCredentials: true
         })
         const settings = response.data
@@ -89,9 +89,13 @@ const TabSettings = () => {
     }
 
     try {
-      const response = await axios.put('http://localhost:5000/api/protected/updateSettings', settingsData, {
-        withCredentials: true
-      })
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/protected/updateSettings`,
+        settingsData,
+        {
+          withCredentials: true
+        }
+      )
       console.log('Settings updated successfully:', response.data)
       setIsSaved(true)
       setSnackbarOpen(true)

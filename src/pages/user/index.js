@@ -67,7 +67,7 @@ const userDashboard = () => {
     const fetchOverviewData = async () => {
       try {
         setLoading(true)
-        const response = await axios.get('http://localhost:5000/api/protected/overview', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/overview`, {
           withCredentials: true // Add this option if your API requires authentication
         })
         setOverviewData(response.data)
@@ -99,7 +99,7 @@ const userDashboard = () => {
         startDate.setDate(startDate.getDate() - ((startDate.getDay() + 6) % 7) - 42) // 49 days for 7 weeks
         const formattedStartDate = startDate.toISOString().split('T')[0] // Format to 'YYYY-MM-DD'
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             startDate: formattedStartDate,
             endDate: formattedEndDate

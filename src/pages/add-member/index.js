@@ -76,9 +76,13 @@ const Members = () => {
       email
     }
 
-    const emailCheckResponse = await axios.post('http://localhost:5000/api/protected/check_email', registrationEmail, {
-      withCredentials: true
-    })
+    const emailCheckResponse = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/protected/check_email`,
+      registrationEmail,
+      {
+        withCredentials: true
+      }
+    )
     if (emailCheckResponse.status === 204) {
       setEmailErrorMessage('Email already exists')
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -106,7 +110,7 @@ const Members = () => {
 
         // Send registration data to the backend and get the created user data
         const registrationResponse = await axios.post(
-          'http://localhost:5000/api/protected/register',
+          `${process.env.NEXT_PUBLIC_API_URL}/api/protected/register`,
           registrationData,
           {
             withCredentials: true
@@ -124,7 +128,7 @@ const Members = () => {
             const signatureBlob = dataURItoBlob(signatureImage)
             signatureFormData.append('upload', signatureBlob, 'signature.png')
 
-            await axios.post(`http://localhost:5000/api/upload/signature/${userId}`, signatureFormData, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/signature/${userId}`, signatureFormData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               },
@@ -164,7 +168,7 @@ const Members = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/getMemberOptions', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getMemberOptions`, {
           withCredentials: true
         })
         const data = response.data

@@ -48,7 +48,7 @@ const Products = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/protected/cannabisProducts', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
         withCredentials: true
       })
       setSearchResult(response.data)
@@ -64,9 +64,12 @@ const Products = () => {
   const handleSearch = async () => {
     if (searchQuery.length > 2) {
       try {
-        const response = await axios.get(`http://localhost:5000/api/protected/cannabisProducts?search=${searchQuery}`, {
-          withCredentials: true
-        })
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts?search=${searchQuery}`,
+          {
+            withCredentials: true
+          }
+        )
         setSearchResult(response.data)
       } catch (error) {
         console.error('Error fetching search results:', error)

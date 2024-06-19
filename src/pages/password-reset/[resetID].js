@@ -93,7 +93,7 @@ const ResetPasswordPage = () => {
         return false
       }
 
-      const response = await axios.post(`http://localhost:5000/api/reset-password/${resetID}`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/reset-password/${resetID}`, {
         newPassword: password
       })
 

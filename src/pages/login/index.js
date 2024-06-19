@@ -90,7 +90,7 @@ const LoginPage = () => {
     try {
       const res = await axios.post(
         // process.env.REACT_APP_API + '/login',
-        'http://localhost:5000/login',
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
 
         {
           email,
@@ -135,7 +135,7 @@ const LoginPage = () => {
       try {
         const response = await axios.get(
           // process.env.REACT_APP_API + "/api/public/user-type",
-          'http://localhost:5000/api/public/user-type',
+          `${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`,
           {
             withCredentials: true
           }

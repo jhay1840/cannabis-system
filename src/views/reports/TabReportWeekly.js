@@ -68,7 +68,7 @@ const TabReportWeekly = () => {
         }
         const formattedEndDate = endDate.toISOString().split('T')[0] // Format to 'YYYY-MM-DD'
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             thisis: 'fetchdata',
             startDate: formattedStartDate,
@@ -129,7 +129,7 @@ const TabReportWeekly = () => {
         startDate.setDate(startDate.getDate() - ((startDate.getDay() + 6) % 7) - 42) // 49 days for 7 weeks
         const formattedStartDate = startDate.toISOString().split('T')[0] // Format to 'YYYY-MM-DD'
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             thisis: 'fetchbardata',
             startDate: formattedStartDate,
@@ -164,7 +164,7 @@ const TabReportWeekly = () => {
           '0'
         )}-${String(lastSunday.getDate()).padStart(2, '0')}`
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           thisis: 'fetchlastdata',
           params: { thisis: 'lastweek', startDate: formattedLastMonday, endDate: formattedLastSunday },
           withCredentials: true

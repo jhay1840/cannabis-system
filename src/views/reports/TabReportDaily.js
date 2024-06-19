@@ -56,7 +56,7 @@ const TabReportDaily = () => {
       try {
         setTotalProducts('0')
         setTopProduct('N/A')
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: closeDate, endDate: closeDate },
           withCredentials: true // Add this option
         })
@@ -110,7 +110,7 @@ const TabReportDaily = () => {
           2,
           '0'
         )}-${String(yesterdayDate.getDate()).padStart(2, '0')}`
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: formattedYesterdayDate, endDate: formattedYesterdayDate },
           withCredentials: true
         })
@@ -151,7 +151,7 @@ const TabReportDaily = () => {
         }
         const formattedEndDate = endDate.toISOString().split('T')[0] // Format to 'YYYY-MM-DD'
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             startDate: formattedStartDate,
             endDate: formattedEndDate

@@ -77,7 +77,7 @@ const member_code = () => {
   // useEffect(() => {
   //   const fetchSettings = async () => {
   //     try {
-  //       const response = await axios.get('http://localhost:5000/api/protected/getSettings', {
+  //       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getSettings', {
   //         withCredentials: true
   //       })
   //       const settings = response.data
@@ -94,7 +94,7 @@ const member_code = () => {
     const memberId = memberCode
     console.log(memberId)
     try {
-      const response = await axios.get('http://localhost:5000/api/protected/creditTransactions', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/creditTransactions`, {
         params: { memberId },
         withCredentials: true
       })
@@ -113,7 +113,7 @@ const member_code = () => {
     const memberId = memberCode
     console.log(memberId)
     try {
-      const response = await axios.get('http://localhost:5000/api/protected/dispenseTransactions', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/dispenseTransactions`, {
         params: { memberId },
         withCredentials: true
       })
@@ -131,7 +131,7 @@ const member_code = () => {
     try {
       const { memberCode } = router.query
 
-      const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
         withCredentials: true
       })
       // Assuming response.data is an array

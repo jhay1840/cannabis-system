@@ -97,12 +97,16 @@ const editProduct = () => {
     formData.append('productImage', file)
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/protected/upload/product/${name}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
-      })
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/protected/upload/product/${name}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          withCredentials: true
+        }
+      )
       console.log(response.data)
       // setProductImageUrl(response.data)
       if (response.data == '') {
@@ -138,9 +142,12 @@ const editProduct = () => {
           return
         }
         setProductCode(productCode)
-        const response = await axios.get(`http://localhost:5000/api/protected/cannabisProducts/${productCode}`, {
-          withCredentials: true
-        })
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
+          {
+            withCredentials: true
+          }
+        )
         // Assuming response.data is an object
         if (response.data) {
           setProductData(response.data)
@@ -176,7 +183,7 @@ const editProduct = () => {
           setProductImageUrl(productCode.imageURL)
         } else {
           const response = await axios.post(
-            'http://localhost:5000/api/protected/updateProduct',
+            `${process.env.NEXT_PUBLIC_API_URL}/api/protected/updateProduct`,
             {
               id,
               name,

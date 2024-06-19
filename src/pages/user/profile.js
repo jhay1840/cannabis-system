@@ -69,7 +69,7 @@ const MemberCode = () => {
 
   const fetchTransactionData = async memberId => {
     try {
-      const response = await axios.get('http://localhost:5000/api/user/protected/creditTransactions', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/creditTransactions`, {
         params: { memberId },
         withCredentials: true
       })
@@ -84,7 +84,7 @@ const MemberCode = () => {
 
   const fetchDispenseTransactionData = async memberId => {
     try {
-      const response = await axios.get('http://localhost:5000/api/user/protected/dispenseTransactions', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/dispenseTransactions`, {
         params: { memberId },
         withCredentials: true
       })
@@ -99,7 +99,7 @@ const MemberCode = () => {
 
   const fetchMemberData = async memberId => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/protected/members/${memberId}`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/members/${memberId}`, {
         withCredentials: true
       })
 
@@ -114,7 +114,7 @@ const MemberCode = () => {
   const fetchUser = async () => {
     try {
       console.log('Fetching user data...')
-      const response = await axios.get('http://localhost:5000/api/user/protected/user', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/user`, {
         withCredentials: true
       })
 

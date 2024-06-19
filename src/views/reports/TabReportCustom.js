@@ -55,7 +55,7 @@ const TabReportCustom = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate, endDate },
           withCredentials: true
         })

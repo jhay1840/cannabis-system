@@ -77,7 +77,7 @@ const TabReportMonthly = () => {
           const day = String(date.getDate()).padStart(2, '0')
           return `${year}-${month}-${day}`
         }
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchdatapak',
             startDate: formattedStartDate,
@@ -142,7 +142,7 @@ const TabReportMonthly = () => {
           return `${year}-${month}-${day}`
         }
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchbar',
             startDate: formattedStartDate,
@@ -187,7 +187,7 @@ const TabReportMonthly = () => {
         const formattedLastMonthStartDate = formatDate(lastMonthStartDate)
         const formattedLastMonthEndDate = formatDate(lastMonthEndDate)
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchlast',
             startDate: formattedLastMonthStartDate,

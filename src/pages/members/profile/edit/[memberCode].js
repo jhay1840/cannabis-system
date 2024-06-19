@@ -77,7 +77,7 @@ const MemberCode = () => {
     try {
       const { memberCode } = router.query
 
-      const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
         withCredentials: true
       })
       // Assuming response.data is an array
@@ -116,7 +116,7 @@ const MemberCode = () => {
   const handleSaveChanges = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/protected/memberUpdate/${memberCodeVar}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/protected/memberUpdate/${memberCodeVar}`,
         editableData,
         {
           withCredentials: true
@@ -131,7 +131,7 @@ const MemberCode = () => {
 
   const handleDeleteMember = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/protected/deleteMember/${memberCodeVar}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/deleteMember/${memberCodeVar}`, {
         withCredentials: true
       })
       console.log('Member deleted successfully')
@@ -153,7 +153,7 @@ const MemberCode = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/getMemberOptions', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getMemberOptions`, {
           withCredentials: true
         })
         const data = response.data

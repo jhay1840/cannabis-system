@@ -79,7 +79,7 @@ const member_code = () => {
     e.preventDefault()
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/protected/updateCredits',
+        `${process.env.NEXT_PUBLIC_API_URL}/api/protected/updateCredits`,
         {
           memberCode: memberCodeVar,
           amount: Number(amount),
@@ -107,7 +107,7 @@ const member_code = () => {
     const memberId = memberCode
     console.log(memberId)
     try {
-      const response = await axios.get('http://localhost:5000/api/protected/creditTransactions', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/creditTransactions`, {
         params: { memberId },
         withCredentials: true
       })
@@ -127,7 +127,7 @@ const member_code = () => {
         const { memberCode } = router.query
         // console.log(memberCode)
 
-        const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
           withCredentials: true
         })
         // Assuming response.data is an array

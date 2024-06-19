@@ -17,7 +17,7 @@ const ConfirmEmailPage = () => {
       }
       if (confirmCode) {
         try {
-          const res = await axios.get(`http://localhost:5000/api/confirm-email/${confirmCode}`)
+          const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/confirm-email/${confirmCode}`)
           console.log(res.data) // Log the response from the backend
           if (res.data === 'Email confirmed and password reset link sent') {
             // Redirect to login page upon successful email confirmation

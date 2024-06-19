@@ -91,7 +91,7 @@ const product_Code = () => {
         return
       }
 
-      const apiUrl = `http://localhost:5000/api/protected/cannabisProducts/${productCode}`
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`
       const response = await axios.delete(apiUrl, {
         withCredentials: true // Include credentials if necessary
       })
@@ -120,9 +120,12 @@ const product_Code = () => {
           return
         }
         setProductCode(productCode)
-        const response = await axios.get(`http://localhost:5000/api/protected/cannabisProducts/${productCode}`, {
-          withCredentials: true
-        })
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
+          {
+            withCredentials: true
+          }
+        )
         // Assuming response.data is an object
         if (response.data) {
           setProductData(response.data)
@@ -139,7 +142,7 @@ const product_Code = () => {
       const productId = productCode
 
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/cannabisTransactions', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisTransactions`, {
           params: { productId },
           withCredentials: true
         })
@@ -157,7 +160,7 @@ const product_Code = () => {
       const productId = productCode
 
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/dispenseTransactions', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/dispenseTransactions`, {
           params: { productId },
           withCredentials: true
         })

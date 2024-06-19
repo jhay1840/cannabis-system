@@ -67,7 +67,7 @@ const UserDropdown = () => {
   }
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:5000/logout', { withCredentials: true })
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/logout`, { withCredentials: true })
       router.push('/login')
     } catch (error) {
       console.error('Error during logout:', error)

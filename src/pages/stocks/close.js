@@ -38,7 +38,7 @@ const CloseStock = () => {
     if (searchQuery.length > 2) {
       const fetchSuggestions = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/api/protected/cannabisProducts', {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
             params: { search: searchQuery },
             withCredentials: true
           })
@@ -89,7 +89,7 @@ const CloseStock = () => {
       }))
 
       // Sending the extracted data to the backend
-      await axios.post('http://localhost:5000/api/protected/saveClosingStock', dataToSend, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/saveClosingStock`, dataToSend, {
         withCredentials: true
       })
 

@@ -27,7 +27,7 @@ const add_member = () => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/members', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
           withCredentials: true // Add this option
         })
         setTableData(response.data)
@@ -45,12 +45,12 @@ const add_member = () => {
       let response
       if (searchQuery.trim() === '') {
         // If search query is empty, fetch default data
-        response = await axios.get('http://localhost:5000/api/protected/members', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
-        response = await axios.get('http://localhost:5000/api/protected/members/search', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/search`, {
           params: { name: searchQuery },
           withCredentials: true
         })
@@ -71,12 +71,12 @@ const add_member = () => {
       let response
       if (searchQueryID.trim() === '') {
         // If search query is empty, fetch default data
-        response = await axios.get('http://localhost:5000/api/protected/members', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
-        response = await axios.get('http://localhost:5000/api/protected/members/searchbyid', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/searchbyid`, {
           params: { id: searchQueryID },
           withCredentials: true
         })

@@ -77,12 +77,16 @@ const addProduct = () => {
     formData.append('productImage', file)
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/protected/upload/product/${name}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
-      })
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/protected/upload/product/${name}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          withCredentials: true
+        }
+      )
       console.log(response.data)
       // setProductImageUrl(response.data)
       if (response.data == '') {
@@ -110,7 +114,7 @@ const addProduct = () => {
         try {
           // alert(productImageUrl)
           const response = await axios.post(
-            'http://localhost:5000/api/protected/addProduct',
+            `${process.env.NEXT_PUBLIC_API_URL}/api/protected/addProduct`,
             {
               name,
               secondBreed,
@@ -147,7 +151,7 @@ const addProduct = () => {
   useEffect(() => {
     const fetchCat = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/getCannabisCategories', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getCannabisCategories`, {
           withCredentials: true
         })
         const data = response.data

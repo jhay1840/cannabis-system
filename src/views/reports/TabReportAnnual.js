@@ -50,7 +50,7 @@ const TabReportAnnual = () => {
         const formattedStartDate = startDate.toISOString().split('T')[0]
         const formattedEndDate = endDate.toISOString().split('T')[0]
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchdatapak',
             startDate: formattedStartDate,
@@ -105,7 +105,7 @@ const TabReportAnnual = () => {
         const formattedStartDate = startDate.toISOString().split('T')[0]
         const formattedEndDate = endDate.toISOString().split('T')[0]
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchbar',
             startDate: formattedStartDate,
@@ -131,7 +131,7 @@ const TabReportAnnual = () => {
         const formattedLastYearStartDate = startDate.toISOString().split('T')[0]
         const formattedLastYearEndDate = endDate.toISOString().split('T')[0]
 
-        const response = await axios.get('http://localhost:5000/api/protected/reports', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchlast',
             startDate: formattedLastYearStartDate,
