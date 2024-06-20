@@ -103,6 +103,10 @@ const LoginPage = () => {
       // const { token } = res.data;
 
       const { userRole } = res.data
+      const { token } = res.data
+
+      // Store the token in session storage
+      sessionStorage.setItem('token', token)
       // console.log(token);
       return userRole
     } catch (error) {
@@ -114,7 +118,6 @@ const LoginPage = () => {
   const handleSubmit = async event => {
     event.preventDefault()
 
-    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)
     const success = await login(email, password)
 
     if (success) {
@@ -131,27 +134,32 @@ const LoginPage = () => {
   // go to dashboard if logged in
   useEffect(() => {
     // Check for JWT cookie and get user details
-    const getUserDetails = async () => {
-      try {
-        const response = await axios.get(
-          // process.env.REACT_APP_API + "/api/public/user-type",
-          `${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`,
-          {
+    const token = sessionStorage.getItem('token')
+    if (token) {
+      const getUserDetails = async () => {
+        try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
             withCredentials: true
+          })
+          const userType = response.data
+
+          if (userType === 'superadmin' || userType === 'admin') {
+            router.push('/')
+          } else if (userType === 'member') {
+            router.push('/user')
           }
-        )
-        const userType = response.data
-        if (userType === 'superadmin' || userType === 'admin') {
-          router.push('/')
-        } else if (userType === 'member') {
-          router.push('/user')
+        } catch (err) {
+          console.error(err)
         }
-      } catch (err) {
-        console.error(err)
       }
+      getUserDetails()
+    } else {
+      router.push('/login') // Redirect to login if token is not found
     }
-    getUserDetails()
-  })
+  }, []) // Empty dependency array ensures useEffect runs only once on mount
 
   return (
     <Box className='content-center'>

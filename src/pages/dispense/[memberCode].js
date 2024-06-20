@@ -98,12 +98,15 @@ const MemberCode = () => {
   const handleCloseModal = () => setOpenModal(false)
 
   const router = useRouter()
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
         const { memberCode } = router.query
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         if (response.data && response.data.length > 0) {
@@ -135,6 +138,9 @@ const MemberCode = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
       setSearchResult(response.data)
@@ -163,6 +169,9 @@ const MemberCode = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/dispenseTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -181,6 +190,9 @@ const MemberCode = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts?search=${searchQuery}`,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )

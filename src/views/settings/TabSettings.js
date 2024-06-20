@@ -44,11 +44,14 @@ const TabSettings = () => {
   const [cannabisType, setCannabisType] = useState('')
 
   const [cannabisTypes, setCannabisTypes] = useState([])
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     const fetchSettings = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getSettings`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         const settings = response.data
@@ -93,6 +96,9 @@ const TabSettings = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/protected/updateSettings`,
         settingsData,
         {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         }
       )

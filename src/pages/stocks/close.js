@@ -33,13 +33,16 @@ const CloseStock = () => {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const router = useRouter()
   const [closeDate, setCloseDate] = useState(getTodayDate())
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     if (searchQuery.length > 2) {
       const fetchSuggestions = async () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
             params: { search: searchQuery },
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           })
           setSearchResult(response.data)
@@ -90,6 +93,9 @@ const CloseStock = () => {
 
       // Sending the extracted data to the backend
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/saveClosingStock`, dataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 

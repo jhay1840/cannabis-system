@@ -89,6 +89,7 @@ const member_code = () => {
 
   //   fetchSettings()
   // }, [])
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const fetchTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -96,6 +97,9 @@ const member_code = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/creditTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -115,6 +119,9 @@ const member_code = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/dispenseTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -132,6 +139,9 @@ const member_code = () => {
       const { memberCode } = router.query
 
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
       // Assuming response.data is an array

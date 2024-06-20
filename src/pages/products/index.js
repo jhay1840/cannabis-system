@@ -30,7 +30,7 @@ const Products = () => {
   const [initialLoadCount, setInitialLoadCount] = useState(6)
   const [loadMoreCount, setLoadMoreCount] = useState(6)
   const [debounceTimer, setDebounceTimer] = useState(null)
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     fetchData()
   }, [])
@@ -49,6 +49,9 @@ const Products = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
       setSearchResult(response.data)
@@ -67,6 +70,9 @@ const Products = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts?search=${searchQuery}`,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )

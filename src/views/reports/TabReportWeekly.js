@@ -40,7 +40,7 @@ const TabReportWeekly = () => {
   const [topProduct, setTopProduct] = useState('')
 
   const [closeDate, setCloseDate] = useState(getTodayDate())
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
@@ -73,6 +73,9 @@ const TabReportWeekly = () => {
             thisis: 'fetchdata',
             startDate: formattedStartDate,
             endDate: formattedEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true // Add this option if needed
         })
@@ -135,6 +138,9 @@ const TabReportWeekly = () => {
             startDate: formattedStartDate,
             endDate: formattedEndDate
           },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option if needed
         })
 
@@ -167,6 +173,9 @@ const TabReportWeekly = () => {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           thisis: 'fetchlastdata',
           params: { thisis: 'lastweek', startDate: formattedLastMonday, endDate: formattedLastSunday },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
 

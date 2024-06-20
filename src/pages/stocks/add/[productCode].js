@@ -72,7 +72,7 @@ const addStocks = () => {
   const [currStock, setCurrStock] = useState('')
 
   const router = useRouter()
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   // Define onChange handlers for amountPurchased and purchasePrice
   const handleAmountPurchasedChange = e => {
     const value = parseFloat(e.target.value)
@@ -137,7 +137,12 @@ const addStocks = () => {
           exStash,
           comments
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
+          withCredentials: true
+        }
       )
 
       // Check if the product was successfully added
@@ -166,6 +171,9 @@ const addStocks = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )

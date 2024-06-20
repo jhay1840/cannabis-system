@@ -60,13 +60,16 @@ const Dashboard = () => {
   const [topProduct, setTopProduct] = useState('')
   const theme = useTheme()
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchOverviewData = async () => {
       try {
         setLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/overview`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option if your API requires authentication
         })
         setOverviewData(response.data)
@@ -99,6 +102,9 @@ const Dashboard = () => {
         const formattedStartDate = startDate.toISOString().split('T')[0] // Format to 'YYYY-MM-DD'
 
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           params: {
             startDate: formattedStartDate,
             endDate: formattedEndDate

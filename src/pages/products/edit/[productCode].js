@@ -91,7 +91,7 @@ const editProduct = () => {
       setProductImage(files[0])
     }
   }
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const uploadImage = async file => {
     const formData = new FormData()
     formData.append('productImage', file)
@@ -102,7 +102,8 @@ const editProduct = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true
         }
@@ -145,6 +146,9 @@ const editProduct = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )
@@ -200,7 +204,12 @@ const editProduct = () => {
               salePrice,
               costPrice
             },
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+              },
+              withCredentials: true
+            }
           )
           if (response.status === 201) {
             router.push(`/products/${productCode}`)

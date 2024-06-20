@@ -51,12 +51,15 @@ const TabReportCustom = () => {
 
   const [startDate, setStartDate] = useState(getYesterdayDate())
   const [endDate, setEndDate] = useState(getYesterdayDate())
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate, endDate },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         setTableData(response.data)

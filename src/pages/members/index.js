@@ -22,12 +22,15 @@ const add_member = () => {
   const [searchQueryID, setSearchQueryID] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [tableData, setTableData] = useState([])
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
         setTableData(response.data)
@@ -46,12 +49,18 @@ const add_member = () => {
       if (searchQuery.trim() === '') {
         // If search query is empty, fetch default data
         response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
         response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/search`, {
           params: { name: searchQuery },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
       }
@@ -72,12 +81,18 @@ const add_member = () => {
       if (searchQueryID.trim() === '') {
         // If search query is empty, fetch default data
         response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
         response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/searchbyid`, {
           params: { id: searchQueryID },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
       }

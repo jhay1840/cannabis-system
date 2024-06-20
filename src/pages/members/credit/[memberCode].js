@@ -74,7 +74,7 @@ const member_code = () => {
   const [error, setError] = useState(null)
 
   const router = useRouter()
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const onSubmit = async e => {
     e.preventDefault()
     try {
@@ -87,6 +87,9 @@ const member_code = () => {
           paidBy: paidBy
         },
         {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add withCredentials option here
         }
       )
@@ -109,6 +112,9 @@ const member_code = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/creditTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -128,6 +134,9 @@ const member_code = () => {
         // console.log(memberCode)
 
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         // Assuming response.data is an array

@@ -36,10 +36,14 @@ const CheckoutPage = () => {
       return null
     }
   }
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     const fetchMemberData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/protected/members/${memberCode}`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         if (response.data && response.data.length > 0) {
@@ -78,9 +82,15 @@ const CheckoutPage = () => {
     const fetchProductDetails = async () => {
       try {
         const productDetailsPromises = parsedProducts.map(async product => {
-          const response = await axios.get(`http://localhost:5000/api/protected/cannabisProducts/${product._id}`, {
-            withCredentials: true
-          })
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${product._id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+              },
+              withCredentials: true
+            }
+          )
           return response.data
         })
 
@@ -120,7 +130,10 @@ const CheckoutPage = () => {
         })
       }
 
-      await axios.post('http://localhost:5000/api/protected/checkout', orderData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/checkout`, orderData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 

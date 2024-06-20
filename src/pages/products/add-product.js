@@ -62,7 +62,7 @@ const addProduct = () => {
   const [salePrice, setSalePrice] = useState('')
   const [costPrice, setCostPrice] = useState('')
   const [imgSrc, setImgSrc] = useState('/images/avatars/cannabis-product-default.jpg')
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const onChange = file => {
     const reader = new FileReader()
     const { files } = file.target
@@ -82,7 +82,8 @@ const addProduct = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true
         }
@@ -130,7 +131,12 @@ const addProduct = () => {
               salePrice,
               costPrice
             },
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+              },
+              withCredentials: true
+            }
           )
           // Check if the product was successfully added
           if (response.status === 201) {
@@ -152,6 +158,9 @@ const addProduct = () => {
     const fetchCat = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getCannabisCategories`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         const data = response.data

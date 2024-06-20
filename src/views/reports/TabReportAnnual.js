@@ -34,7 +34,7 @@ const TabReportAnnual = () => {
   const [trend, setTrend] = useState('')
   const [totalProducts, setTotalProducts] = useState('')
   const [topProduct, setTopProduct] = useState('')
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,6 +55,9 @@ const TabReportAnnual = () => {
             this: 'fetchdatapak',
             startDate: formattedStartDate,
             endDate: formattedEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true // Add this option if needed
         })
@@ -111,6 +114,9 @@ const TabReportAnnual = () => {
             startDate: formattedStartDate,
             endDate: formattedEndDate
           },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option if needed
         })
 
@@ -136,6 +142,9 @@ const TabReportAnnual = () => {
             this: 'fetchlast',
             startDate: formattedLastYearStartDate,
             endDate: formattedLastYearEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true
         })

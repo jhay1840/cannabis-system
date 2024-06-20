@@ -40,7 +40,7 @@ const TabReportMonthly = () => {
   const [topProduct, setTopProduct] = useState('')
 
   const [closeDate, setCloseDate] = useState(getTodayMonth())
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
@@ -82,6 +82,9 @@ const TabReportMonthly = () => {
             this: 'fetchdatapak',
             startDate: formattedStartDate,
             endDate: formattedEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true // Add this option if needed
         })
@@ -148,6 +151,9 @@ const TabReportMonthly = () => {
             startDate: formattedStartDate,
             endDate: formattedEndDate
           },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option if needed
         })
         console.log(formattedStartDate)
@@ -192,6 +198,9 @@ const TabReportMonthly = () => {
             this: 'fetchlast',
             startDate: formattedLastMonthStartDate,
             endDate: formattedLastMonthEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true
         })

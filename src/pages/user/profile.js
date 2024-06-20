@@ -66,11 +66,14 @@ const MemberCode = () => {
   const [memberCode, setMemberCode] = useState(null)
 
   const router = useRouter()
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const fetchTransactionData = async memberId => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/creditTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -86,6 +89,9 @@ const MemberCode = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/dispenseTransactions`, {
         params: { memberId },
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -100,6 +106,9 @@ const MemberCode = () => {
   const fetchMemberData = async memberId => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/members/${memberId}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 
@@ -115,6 +124,9 @@ const MemberCode = () => {
     try {
       console.log('Fetching user data...')
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/user`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
 

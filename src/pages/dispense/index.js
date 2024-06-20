@@ -22,12 +22,15 @@ const dispense = () => {
   const [searchQueryID, setSearchQueryID] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [tableData, setTableData] = useState([])
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/protected/members', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
         setTableData(response.data)
@@ -45,12 +48,18 @@ const dispense = () => {
       let response
       if (searchQuery.trim() === '') {
         // If search query is empty, fetch default data
-        response = await axios.get('http://localhost:5000/api/protected/members', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
-        response = await axios.get('http://localhost:5000/api/protected/members/search', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/search`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           params: { name: searchQuery },
           withCredentials: true
         })
@@ -71,13 +80,19 @@ const dispense = () => {
       let response
       if (searchQueryID.trim() === '') {
         // If search query is empty, fetch default data
-        response = await axios.get('http://localhost:5000/api/protected/members', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
       } else {
         // Otherwise, perform search
-        response = await axios.get('http://localhost:5000/api/protected/members/searchbyid', {
+        response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/searchbyid`, {
           params: { id: searchQueryID },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
       }

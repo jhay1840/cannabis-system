@@ -3,36 +3,43 @@ import { useEffect } from 'react'
 import axios from 'axios'
 
 import useMediaQuery from '@mui/material/useMediaQuery'
-// ** Layout Imports
 import MemberLayout from 'src/@core/layouts/MemberLayout'
-// ** Navigation Imports
 import MemberVerticalNavItems from 'src/navigation/memberVertical'
-
-// ** Component Import
-
 import VerticalAppBarContent from 'src/layouts/components/vertical/AppBarContent'
-
-// ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 const MemberWrapper = ({ children }) => {
   const { settings, saveSettings } = useSettings()
-
   const router = useRouter()
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
+
   useEffect(() => {
     const checkAuthentication = async () => {
+      // Get the JWT token from session storage
+      const token = sessionStorage.getItem('token')
+
+      if (!token) {
+        // Redirect to login if token is not found
+        router.push('/login')
+        return
+      }
+
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
+
         console.log(response.data)
-        if (response.data != 'member') {
-          router.push('/login')
+
+        if (response.data !== 'member') {
+          router.push('/login') // Redirect to login if not authenticated as a member
         }
       } catch (error) {
         console.error('Error checking authentication:', error)
-        router.push('/login')
+        router.push('/login') // Redirect to login in case of error
       }
     }
 
@@ -45,9 +52,7 @@ const MemberWrapper = ({ children }) => {
       settings='boxed'
       saveSettings={saveSettings}
       verticalNavItems={MemberVerticalNavItems()} // Navigation Items
-      verticalAppBarContent={(
-        props // AppBar Content
-      ) => (
+      verticalAppBarContent={props => (
         <VerticalAppBarContent
           hidden={hidden}
           settings={settings}

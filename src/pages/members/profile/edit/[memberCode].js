@@ -72,12 +72,15 @@ const MemberCode = () => {
   const router = useRouter()
   const [idTypes, setIdTypes] = useState([])
   const [estConsump, setEstConsump] = useState([])
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const fetchMemberData = async () => {
     try {
       const { memberCode } = router.query
 
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
       // Assuming response.data is an array
@@ -119,6 +122,9 @@ const MemberCode = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/protected/memberUpdate/${memberCodeVar}`,
         editableData,
         {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         }
       )
@@ -132,6 +138,9 @@ const MemberCode = () => {
   const handleDeleteMember = async () => {
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/deleteMember/${memberCodeVar}`, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       })
       console.log('Member deleted successfully')
@@ -154,6 +163,9 @@ const MemberCode = () => {
     const fetchOptions = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getMemberOptions`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         const data = response.data

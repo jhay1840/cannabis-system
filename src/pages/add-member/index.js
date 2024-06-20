@@ -54,7 +54,7 @@ const Members = () => {
 
   const [nationality, setNationality] = useState('')
   const [consumption, setConsumption] = useState('')
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   const {
     register,
     handleSubmit,
@@ -80,6 +80,9 @@ const Members = () => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/protected/check_email`,
       registrationEmail,
       {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true
       }
     )
@@ -113,6 +116,9 @@ const Members = () => {
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/register`,
           registrationData,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )
@@ -130,7 +136,8 @@ const Members = () => {
 
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/signature/${userId}`, signatureFormData, {
               headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}` // Include JWT token in Authorization header
               },
               withCredentials: true
             })
@@ -169,6 +176,9 @@ const Members = () => {
     const fetchOptions = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/getMemberOptions`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
         const data = response.data

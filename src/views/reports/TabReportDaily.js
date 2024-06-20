@@ -49,7 +49,7 @@ const TabReportDaily = () => {
   const [topProduct, setTopProduct] = useState('')
 
   const [closeDate, setCloseDate] = useState(getYesterdayDate())
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   useEffect(() => {
     // Fetch data from your API or any other source
     const fetchData = async () => {
@@ -58,6 +58,9 @@ const TabReportDaily = () => {
         setTopProduct('N/A')
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: closeDate, endDate: closeDate },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true // Add this option
         })
         setTableData(response.data)
@@ -112,6 +115,9 @@ const TabReportDaily = () => {
         )}-${String(yesterdayDate.getDate()).padStart(2, '0')}`
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: formattedYesterdayDate, endDate: formattedYesterdayDate },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
 
@@ -155,6 +161,9 @@ const TabReportDaily = () => {
           params: {
             startDate: formattedStartDate,
             endDate: formattedEndDate
+          },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
           },
           withCredentials: true // Add this option if needed
         })

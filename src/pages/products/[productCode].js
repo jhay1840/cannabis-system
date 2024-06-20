@@ -71,7 +71,7 @@ const product_Code = () => {
 
   const [openDialog, setOpenDialog] = useState(false) // State for dialog open/close
   const router = useRouter()
-
+  const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
   // Function to handle opening the dialog
   const handleOpenDialog = () => {
     setOpenDialog(true)
@@ -93,6 +93,9 @@ const product_Code = () => {
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`
       const response = await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+        },
         withCredentials: true // Include credentials if necessary
       })
 
@@ -123,6 +126,9 @@ const product_Code = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
+            headers: {
+              Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+            },
             withCredentials: true
           }
         )
@@ -144,6 +150,9 @@ const product_Code = () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisTransactions`, {
           params: { productId },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
 
@@ -162,6 +171,9 @@ const product_Code = () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/dispenseTransactions`, {
           params: { productId },
+          headers: {
+            Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+          },
           withCredentials: true
         })
 
