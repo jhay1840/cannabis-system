@@ -53,12 +53,14 @@ const CheckoutPage = () => {
         console.error('Error fetching member data:', error)
       }
     }
+
     const getTodayDate = () => {
       const today = new Date()
       const year = today.getFullYear()
       const month = String(today.getMonth() + 1).padStart(2, '0') // Months are zero-indexed
       const day = String(today.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
+      
+return `${year}-${month}-${day}`
     }
 
     // Set checkoutDate to today's date when the component mounts
@@ -66,6 +68,7 @@ const CheckoutPage = () => {
 
     fetchMemberData()
   }, [memberCode])
+
   // Validate and parse products data
   const parsedProducts = parseJSON(products)
   const isValidProducts = Array.isArray(parsedProducts) && parsedProducts.length > 0
@@ -91,7 +94,8 @@ const CheckoutPage = () => {
               withCredentials: true
             }
           )
-          return response.data
+          
+return response.data
         })
 
         const productDetailsData = await Promise.all(productDetailsPromises)
@@ -119,7 +123,8 @@ const CheckoutPage = () => {
         isGift,
         products: parsedProducts.map(product => {
           const matchedProduct = productDetails.find(p => p._id === product._id)
-          return {
+          
+return {
             productId: product._id,
             name: matchedProduct?.name,
             category: matchedProduct?.category,
@@ -150,7 +155,8 @@ const CheckoutPage = () => {
   if (!memberData) {
     return <p>Loading member data...</p>
   }
-  return (
+  
+return (
     <DashboardWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>
@@ -181,7 +187,8 @@ const CheckoutPage = () => {
                               const matchedProduct = productDetails.find(p => p._id === product._id)
                               if (!matchedProduct) return null // Handle cases where matching product details are not found
                               const subtotal = matchedProduct.salePrice * product.weight
-                              return (
+                              
+return (
                                 <TableRow key={index}>
                                   <TableCell component='th' scope='row'>
                                     {matchedProduct.category}

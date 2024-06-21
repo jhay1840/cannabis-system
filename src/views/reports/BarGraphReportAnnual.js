@@ -13,11 +13,13 @@ const BarGraphReportAnnual = ({ data, closeDate }) => {
 
   // Prepare yearly usage data for the last 5 years
   const currentYear = new Date(closeDate).getFullYear()
+
   const yearlyUsageData = Array.from({ length: 5 }, (_, index) => {
     const year = currentYear - 4 + index
     const yearData = data.filter(item => new Date(item.closeDate).getFullYear() === year)
     const usage = yearData.reduce((total, item) => total + (item.startOfDayQty - item.endOfDayQty), 0)
-    return { yearLabel: year.toString(), usage: usage || 0 }
+    
+return { yearLabel: year.toString(), usage: usage || 0 }
   })
 
   const options = {

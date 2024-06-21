@@ -33,6 +33,7 @@ const TabSettings = () => {
   const [isSaved, setIsSaved] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [appName, setAppName] = useState('')
+
   // const [appLink, setAppLink] = useState('')
 
   const [idType, setIdType] = useState('')
@@ -55,6 +56,7 @@ const TabSettings = () => {
           withCredentials: true
         })
         const settings = response.data
+
         // setAppLink(settings.appDomainLink)
         setAppName(settings.appName)
         setIdTypes(settings.idTypes)

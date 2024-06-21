@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import TableReport from '../tables/TableReport'
 import BarGraphReport from 'src/views/reports/BarGraphReport'
 import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+
 // ** Icons Imports
 import Cannabis from 'mdi-material-ui/Cannabis'
 import BasketCheckOutline from 'mdi-material-ui/BasketCheckOutline'
@@ -22,7 +23,8 @@ import BarGraphReportAnnual from './BarGraphReportAnnual'
 const getTodayYear = () => {
   const today = new Date()
   const year = today.getFullYear()
-  return `${year}`
+  
+return `${year}`
 }
 
 const TabReportAnnual = () => {

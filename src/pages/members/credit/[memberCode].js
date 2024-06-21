@@ -47,8 +47,10 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
+
 const calculateAge = dob => {
   const birthDate = new Date(dob)
   const today = new Date()
@@ -62,7 +64,7 @@ const calculateAge = dob => {
   return age
 }
 
-const member_code = () => {
+const Member_code = () => {
   const [tableData, setTableData] = useState([])
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [memberData, setMemberData] = useState(null)
@@ -75,6 +77,7 @@ const member_code = () => {
 
   const router = useRouter()
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const onSubmit = async e => {
     e.preventDefault()
     try {
@@ -98,6 +101,7 @@ const member_code = () => {
       setAmount('')
       setPaidBy('')
       setComment('')
+
       // Reload member data after donation
       router.push(`/dispense/${memberCodeVar}`)
     } catch (error) {
@@ -105,6 +109,7 @@ const member_code = () => {
       setError(error.response.data.error)
     }
   }
+
   const fetchTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -131,6 +136,7 @@ const member_code = () => {
     const fetchMemberData = async () => {
       try {
         const { memberCode } = router.query
+
         // console.log(memberCode)
 
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
@@ -139,6 +145,7 @@ const member_code = () => {
           },
           withCredentials: true
         })
+
         // Assuming response.data is an array
         if (response.data && response.data.length > 0) {
           setMemberData(response.data[0])
@@ -250,4 +257,4 @@ const member_code = () => {
   )
 }
 
-export default member_code
+export default Member_code

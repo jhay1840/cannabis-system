@@ -43,7 +43,8 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+  
+return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
 const calculateAge = dob => {
@@ -67,6 +68,7 @@ const MemberCode = () => {
 
   const router = useRouter()
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const fetchTransactionData = async memberId => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/creditTransactions`, {
@@ -123,6 +125,7 @@ const MemberCode = () => {
   const fetchUser = async () => {
     try {
       console.log('Fetching user data...')
+
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected/user`, {
         headers: {
           Authorization: `Bearer ${token}` // Include JWT token in Authorization header

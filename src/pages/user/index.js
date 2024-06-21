@@ -20,6 +20,7 @@ import BarGraphReport from 'src/views/reports/BarGraphReportWeekly'
 import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import MemberWrapper from 'src/components/MemberWrapper'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
@@ -30,8 +31,10 @@ const getTodayDate = () => {
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const day = String(today.getDate()).padStart(2, '0')
+
   return `${year}-${month}-${day}`
 }
+
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')({
   right: 0,
@@ -47,7 +50,8 @@ const TrophyImg = styled('img')({
   height: 98,
   position: 'absolute'
 })
-const userDashboard = () => {
+
+const UserDashboard = () => {
   const [barData, setBarData] = useState([])
   const [overviewData, setOverviewData] = useState([])
 
@@ -67,6 +71,7 @@ const userDashboard = () => {
     const fetchOverviewData = async () => {
       try {
         setLoading(true)
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/overview`, {
           headers: {
             Authorization: `Bearer ${token}` // Include JWT token in Authorization header
@@ -127,6 +132,7 @@ const userDashboard = () => {
               usage: 0
             }
           }
+
           // Add usage to the existing product or create a new entry if not exist
           productUsageMap[item.productId].usage += usage
         })
@@ -159,6 +165,7 @@ const userDashboard = () => {
     fetchOverviewData()
   }, [closeDate])
   if (loading) return <div>Loading...</div>
+
   return (
     <MemberWrapper>
       <ApexChartWrapper>
@@ -195,5 +202,6 @@ const userDashboard = () => {
     </MemberWrapper>
   )
 }
-userDashboard.getLayout = page => <BlankLayout>{page}</BlankLayout>
-export default userDashboard
+UserDashboard.getLayout = page => <BlankLayout>{page}</BlankLayout>
+
+export default UserDashboard

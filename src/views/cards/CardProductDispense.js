@@ -19,21 +19,26 @@ const CardProductDispense = ({ imageUrl, title, onWeightChange, productId, price
     const newPrice = price * newWeight
     setWeight(newWeight)
     setProductPrice(newPrice)
+
     // Notify parent component of weight change
     onWeightChange(productId, newWeight)
     onPriceChange(productId, newPrice)
   }
+
   const handlePriceChange = event => {
     const newPrice = parseFloat(event.target.value) || 0
     setProductPrice(newPrice)
+
     // Calculate new weight based on the updated price
     const newWeight = newPrice / price
     setWeight(newWeight)
+
     // Notify parent component of weight change
     onWeightChange(productId, newWeight)
     onPriceChange(productId, newPrice)
   }
-  return (
+  
+return (
     <Card>
       <CardMedia sx={{ height: '14.5625rem' }} image={imageUrl} />
       <CardContent>

@@ -13,19 +13,24 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import { Autocomplete } from '@mui/material'
 import DashboardWrapper from 'src/components/DashboardWrapper'
+
 // ** Demo Components Imports
 import TableClosing from 'src/views/tables/TableClosing'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
+
+
 // Function to get today's date in YYYY-MM-DD format
 const getTodayDate = () => {
   const today = new Date()
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const day = String(today.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  
+return `${year}-${month}-${day}`
 }
+
 const CloseStock = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResult, setSearchResult] = useState([])
@@ -67,18 +72,21 @@ const CloseStock = () => {
       setSearchQuery('') // Clear the search input after adding
     }
   }
+
   const handleSaveData = async () => {
     try {
       // Check if any item is missing required data (empty fields)
       if (tableData.some(item => !item.endOfDayQty) || tableData.some(item => !item.startOfDayQty)) {
         alert('Please fill in all fields before saving.')
-        return // Exit function if any item is missing required data
+        
+return // Exit function if any item is missing required data
       }
 
       // Check if endOfDayQty is less than startOfDayQty for any item
       if (tableData.some(item => Number(item.endOfDayQty) > Number(item.startOfDayQty))) {
         alert('End of day quantity cannot be greater than start of day quantity.')
-        return // Exit function if invalid data is found
+        
+return // Exit function if invalid data is found
       }
 
       // Extracting required fields from tableData

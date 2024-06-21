@@ -28,12 +28,14 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     textAlign: 'center'
   }
 }))
+
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
   height: 120,
   marginRight: theme.spacing(6.25),
   borderRadius: theme.shape.borderRadius
 }))
+
 const ResetButtonStyled = styled(Button)(({ theme }) => ({
   marginLeft: theme.spacing(4.5),
   [theme.breakpoints.down('sm')]: {
@@ -44,7 +46,7 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
   }
 }))
 
-const addProduct = () => {
+const AddProduct = () => {
   const [name, setName] = useState('')
   const [secondBreed, setSecondBreed] = useState('')
   const [type, setType] = useState('')
@@ -63,6 +65,7 @@ const addProduct = () => {
   const [costPrice, setCostPrice] = useState('')
   const [imgSrc, setImgSrc] = useState('/images/avatars/cannabis-product-default.jpg')
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const onChange = file => {
     const reader = new FileReader()
     const { files } = file.target
@@ -72,6 +75,7 @@ const addProduct = () => {
       setProductImage(files[0])
     }
   }
+
   const uploadImage = async file => {
     const formData = new FormData()
     formData.append('productImage', file)
@@ -89,10 +93,12 @@ const addProduct = () => {
         }
       )
       console.log(response.data)
+
       // setProductImageUrl(response.data)
       if (response.data == '') {
         return ''
       }
+
       return response.data
     } catch (error) {
       console.error(error)
@@ -138,6 +144,7 @@ const addProduct = () => {
               withCredentials: true
             }
           )
+
           // Check if the product was successfully added
           if (response.status === 201) {
             // Redirect to the products page
@@ -152,6 +159,7 @@ const addProduct = () => {
 
       fetchData()
     }
+
     // Call the async function
   }, [productImageUrl])
   useEffect(() => {
@@ -183,6 +191,7 @@ const addProduct = () => {
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i)
     }
+
     return new Blob([ab], { type: mimeString })
   }
   const { register, handleSubmit, reset } = useForm()
@@ -369,4 +378,4 @@ const addProduct = () => {
   )
 }
 
-export default addProduct
+export default AddProduct

@@ -18,6 +18,7 @@ const navigation = () => {
       icon: Account,
       path: '/user/profile'
     }
+
     // {
     //   sectionTitle: 'Settings'
     // },

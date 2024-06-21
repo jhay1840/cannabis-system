@@ -38,6 +38,7 @@ const StatisticsCard = ({ data }) => {
       icon: <AccountGroup sx={{ fontSize: '1.75rem' }} />
     }
   ]
+
   const renderStats = () => {
     return salesData.map((item, index) => (
       <Grid item xs={12} sm={4} key={index}>
@@ -63,7 +64,8 @@ const StatisticsCard = ({ data }) => {
       </Grid>
     ))
   }
-  return (
+  
+return (
     <Card>
       <CardHeader
         title='Overview'

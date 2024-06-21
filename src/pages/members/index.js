@@ -11,13 +11,14 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import DashboardWrapper from 'src/components/DashboardWrapper'
+
 // ** Demo Components Imports
 import TableBasic from 'src/views/tables/TableMembers'
 
 // ** Icons Imports
 import Magnify from 'mdi-material-ui/Magnify'
 
-const add_member = () => {
+const Add_member = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchQueryID, setSearchQueryID] = useState('')
   const [searchResult, setSearchResult] = useState([])
@@ -66,10 +67,12 @@ const add_member = () => {
       }
 
       setTableData(response.data)
+
       // Clear the other form's search query
       setSearchQueryID('')
     } catch (error) {
       console.error('Error while searching members:', error)
+
       // Handle the error, e.g., show an error message to the user
     }
   }
@@ -98,10 +101,12 @@ const add_member = () => {
       }
 
       setTableData(response.data)
+
       // Clear the other form's search query
       setSearchQuery('')
     } catch (error) {
       console.error('Error while searching members:', error)
+
       // Handle the error, e.g., show an error message to the user
     }
   }
@@ -175,4 +180,4 @@ const add_member = () => {
   )
 }
 
-export default add_member
+export default Add_member

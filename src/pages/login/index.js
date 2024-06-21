@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import dotenv from 'dotenv'
 import { useEffect } from 'react'
+
 dotenv.config()
 
 // ** Next Imports
@@ -12,6 +13,7 @@ import { useRouter } from 'next/router'
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+
 // import Divider from '@mui/material/Divider'
 // import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
@@ -86,9 +88,11 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
   const login = async (email, password) => {
     try {
       const res = await axios.post(
+
         // process.env.REACT_APP_API + '/login',
         `${process.env.NEXT_PUBLIC_API_URL}/login`,
 
@@ -100,6 +104,7 @@ const LoginPage = () => {
           withCredentials: true
         }
       )
+
       // const { token } = res.data;
 
       const { userRole } = res.data
@@ -107,6 +112,7 @@ const LoginPage = () => {
 
       // Store the token in session storage
       sessionStorage.setItem('token', token)
+
       // console.log(token);
       return userRole
     } catch (error) {
@@ -222,6 +228,7 @@ const LoginPage = () => {
               variant='contained'
               sx={{ marginBottom: 7 }}
               type='submit'
+
               // onClick={() => router.push('/')}
             >
               Login

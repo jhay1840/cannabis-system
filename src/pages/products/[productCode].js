@@ -45,24 +45,28 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
+
 const transformImageUrl = imageUrl => {
   if (typeof imageUrl === 'string') {
     if (imageUrl === '') {
       return '/images/avatars/cannabis-product-default.jpg'
     }
     let correctedPath = imageUrl.replace(/\\/g, '/')
+
     // Construct the new image URL
     // return `/server/${correctedPath}`
     return correctedPath
   } else {
     console.error('Image URL must be a string.')
+
     return null // or handle the case appropriately
   }
 }
 
-const product_Code = () => {
+const Product_Code = () => {
   const [tableData, setTableData] = useState([])
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
   const [productData, setProductData] = useState(null)
@@ -72,6 +76,7 @@ const product_Code = () => {
   const [openDialog, setOpenDialog] = useState(false) // State for dialog open/close
   const router = useRouter()
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   // Function to handle opening the dialog
   const handleOpenDialog = () => {
     setOpenDialog(true)
@@ -88,10 +93,12 @@ const product_Code = () => {
       const { productCode } = router.query
       if (!productCode) {
         console.error('Product code is missing.')
+
         return
       }
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`
+
       const response = await axios.delete(apiUrl, {
         headers: {
           Authorization: `Bearer ${token}` // Include JWT token in Authorization header
@@ -102,14 +109,17 @@ const product_Code = () => {
       if (response.status === 200) {
         // Product deleted successfully
         console.log('Product deleted successfully.')
+
         // Redirect or perform any necessary actions after deletion
         router.push('/products') // Example redirect to products page
       } else {
         console.error('Error deleting product:', response.data)
+
         // Handle error, show notification, etc.
       }
     } catch (error) {
       console.error('Error deleting product:', error)
+
       // Handle error, show notification, etc.
     }
   }
@@ -123,6 +133,7 @@ const product_Code = () => {
           return
         }
         setProductCode(productCode)
+
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
@@ -132,6 +143,7 @@ const product_Code = () => {
             withCredentials: true
           }
         )
+
         // Assuming response.data is an object
         if (response.data) {
           setProductData(response.data)
@@ -164,6 +176,7 @@ const product_Code = () => {
         console.error('Error fetching transaction data:', error)
       }
     }
+
     const fetchDispenseTransactionData = async () => {
       const { productCode } = router.query
       const productId = productCode
@@ -363,4 +376,4 @@ const product_Code = () => {
   )
 }
 
-export default product_Code
+export default Product_Code

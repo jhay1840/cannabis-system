@@ -21,7 +21,8 @@ const transformImageUrl = imageUrl => {
   if (!imageUrl || typeof imageUrl !== 'string') {
     return '/images/avatars/cannabis-product-default.jpg'
   }
-  return imageUrl.replace(/\\/g, '/')
+  
+return imageUrl.replace(/\\/g, '/')
 }
 
 const Stocks = () => {
@@ -39,11 +40,13 @@ const Stocks = () => {
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
+
     const timer = setTimeout(() => {
       handleSearch()
     }, 500) // Adjust debounce delay as needed (e.g., 500 milliseconds)
     setDebounceTimer(timer)
-    return () => clearTimeout(timer)
+    
+return () => clearTimeout(timer)
   }, [searchQuery])
 
   const fetchData = async () => {

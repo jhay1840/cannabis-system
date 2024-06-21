@@ -13,7 +13,8 @@ const ConfirmEmailPage = () => {
       const { confirmCode } = router.query
       if (!confirmCode) {
         console.error('confirmation code is missing.')
-        return
+        
+return
       }
       if (confirmCode) {
         try {
@@ -27,6 +28,7 @@ const ConfirmEmailPage = () => {
           }
         } catch (error) {
           console.error('Error confirming email:', error)
+
           // Handle error - redirect to an error page or show an error message
         }
       }
@@ -45,4 +47,5 @@ const ConfirmEmailPage = () => {
   )
 }
 ConfirmEmailPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
+
 export default ConfirmEmailPage

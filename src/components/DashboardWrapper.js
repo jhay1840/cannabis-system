@@ -13,7 +13,8 @@ const DashboardWrapper = ({ children }) => {
       if (!token) {
         // Redirect to login if token is not found
         router.push('/login')
-        return
+        
+return
       }
 
       try {
@@ -31,6 +32,7 @@ const DashboardWrapper = ({ children }) => {
         } else if (response.data === 'member') {
           router.push('/user') // Redirect to user dashboard for members
         }
+
         // Add more conditions for other user types if needed
       } catch (error) {
         console.error('Error checking authentication:', error)
@@ -39,7 +41,7 @@ const DashboardWrapper = ({ children }) => {
     }
 
     checkAuthentication()
-  }, []) // Empty dependency array ensures useEffect runs only once on mount
+  }, [router]) // Add router to the dependency array
 
   return <>{children}</>
 }

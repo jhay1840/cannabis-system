@@ -48,8 +48,10 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
+
 const calculateAge = dob => {
   const birthDate = new Date(dob)
   const today = new Date()
@@ -63,7 +65,7 @@ const calculateAge = dob => {
   return age
 }
 
-const member_code = () => {
+const Member_code = () => {
   const [tableData, setTableData] = useState([])
   const [tableDataCredits, setTableDataCredits] = useState([])
   const [dispenseData, setDispenseData] = useState([])
@@ -90,6 +92,7 @@ const member_code = () => {
   //   fetchSettings()
   // }, [])
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const fetchTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -112,6 +115,7 @@ const member_code = () => {
       console.error('Error fetching transaction data:', error)
     }
   }
+
   const fetchDispenseTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -134,6 +138,7 @@ const member_code = () => {
       console.error('Error fetching transaction data:', error)
     }
   }
+
   const fetchMemberData = async () => {
     try {
       const { memberCode } = router.query
@@ -144,6 +149,7 @@ const member_code = () => {
         },
         withCredentials: true
       })
+
       // Assuming response.data is an array
       if (response.data && response.data.length > 0) {
         setMemberData(response.data[0])
@@ -163,6 +169,7 @@ const member_code = () => {
       if (typeof window !== 'undefined') {
         return window.location.origin
       }
+
       return ''
     }
 
@@ -352,4 +359,4 @@ const member_code = () => {
   )
 }
 
-export default member_code
+export default Member_code

@@ -26,6 +26,7 @@ import BarGraphReportCustom from './BarGraphReportCustom'
 
 const getYesterdayDate = () => {
   const today = new Date()
+
   // Get yesterday's date by subtracting 1 day from today
   const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
 

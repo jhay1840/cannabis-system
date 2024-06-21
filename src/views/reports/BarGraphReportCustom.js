@@ -15,8 +15,11 @@ const BarGraphReportCustom = ({ data, startDate, endDate }) => {
     const date = new Date(dateStr)
     const day = date.getDate()
     const month = date.toLocaleString('default', { month: 'short' })
-    return `${day} ${month}`
+    
+return `${day} ${month}`
   }
+
+
   // Function to generate date labels for the given date range
   const getDatesInRange = (start, end) => {
     const dateArray = []
@@ -34,7 +37,8 @@ const BarGraphReportCustom = ({ data, startDate, endDate }) => {
   // Generate date labels
   const dateLabels = getDatesInRange(startDate, endDate).map(date => {
     const dateObj = new Date(date)
-    return `${dateObj.getDate()} ${dateObj.toLocaleString('default', { month: 'short' })}`
+    
+return `${dateObj.getDate()} ${dateObj.toLocaleString('default', { month: 'short' })}`
   })
 
   // Initialize daily usage data with zeros for each date label

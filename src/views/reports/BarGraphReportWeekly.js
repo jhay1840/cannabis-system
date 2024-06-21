@@ -19,7 +19,8 @@ const BarGraphReport = ({ data, closeDate }) => {
     endOfWeek.setDate(startOfWeek.getDate() + 6) // Sunday
 
     const options = { month: 'short', day: 'numeric' }
-    return `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', options)}`
+    
+return `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', options)}`
   }
 
   // Initialize weekly usage data

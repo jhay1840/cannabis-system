@@ -30,12 +30,14 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
     textAlign: 'center'
   }
 }))
+
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
   height: 120,
   marginRight: theme.spacing(6.25),
   borderRadius: theme.shape.borderRadius
 }))
+
 const ResetButtonStyled = styled(Button)(({ theme }) => ({
   marginLeft: theme.spacing(4.5),
   [theme.breakpoints.down('sm')]: {
@@ -45,22 +47,25 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
     marginTop: theme.spacing(4)
   }
 }))
+
 const transformImageUrl = imageUrl => {
   if (typeof imageUrl === 'string') {
     if (imageUrl === '') {
       return '/images/avatars/cannabis-product-default.jpg'
     }
     let correctedPath = imageUrl.replace(/\\/g, '/')
+
     // Construct the new image URL
     // return `/server/${correctedPath}`
     return correctedPath
   } else {
     console.error('Image URL must be a string.')
+
     return null // or handle the case appropriately
   }
 }
 
-const editProduct = () => {
+const EditProduct = () => {
   const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [secondBreed, setSecondBreed] = useState('')
@@ -92,6 +97,7 @@ const editProduct = () => {
     }
   }
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const uploadImage = async file => {
     const formData = new FormData()
     formData.append('productImage', file)
@@ -109,10 +115,12 @@ const editProduct = () => {
         }
       )
       console.log(response.data)
+
       // setProductImageUrl(response.data)
       if (response.data == '') {
         return ''
       }
+
       return response.data
     } catch (error) {
       console.error(error)
@@ -143,6 +151,7 @@ const editProduct = () => {
           return
         }
         setProductCode(productCode)
+
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
@@ -152,6 +161,7 @@ const editProduct = () => {
             withCredentials: true
           }
         )
+
         // Assuming response.data is an object
         if (response.data) {
           setProductData(response.data)
@@ -169,6 +179,7 @@ const editProduct = () => {
           setSecondBreed(response.data.secondBreed)
           setType(response.data.type)
           setImgSrc(transformImageUrl(response.data.imageURL))
+
           // setProductImage(transformImageUrl(response.data.imageURL))
         }
       } catch (error) {
@@ -412,4 +423,4 @@ const editProduct = () => {
   )
 }
 
-export default editProduct
+export default EditProduct

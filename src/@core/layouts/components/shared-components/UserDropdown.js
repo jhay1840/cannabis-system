@@ -65,6 +65,7 @@ const UserDropdown = () => {
       color: 'text.secondary'
     }
   }
+
   const handleLogout = async () => {
     try {
       await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/logout`, { withCredentials: true })
@@ -74,6 +75,7 @@ const UserDropdown = () => {
       console.error('Error during logout:', error)
     }
   }
+
   return (
     <Fragment>
       <Badge
@@ -117,7 +119,7 @@ const UserDropdown = () => {
         </Box> */}
         {/* <Divider sx={{ mt: 0, mb: 1 }} /> */}
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Link href={'account-settings'}>
+          <Link href={'account-settings'} passHref>
             <Box sx={styles}>
               <AccountOutline sx={{ marginRight: 2 }} />
               Profile
@@ -138,7 +140,7 @@ const UserDropdown = () => {
         </MenuItem> */}
         {/* <Divider /> */}
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Link href={'settings'}>
+          <Link href={'settings'} passHref>
             <Box sx={styles}>
               <CogOutline sx={{ marginRight: 2 }} />
               Settings

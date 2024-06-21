@@ -15,7 +15,8 @@ const TableClosing = ({ data, setTableData }) => {
       if (item._id === id) {
         return { ...item, [field]: e.target.value }
       }
-      return item
+      
+return item
     })
     setTableData(newTableData)
   }

@@ -21,6 +21,7 @@ const MemberWrapper = ({ children }) => {
       if (!token) {
         // Redirect to login if token is not found
         router.push('/login')
+
         return
       }
 
@@ -44,7 +45,7 @@ const MemberWrapper = ({ children }) => {
     }
 
     checkAuthentication()
-  }, [])
+  }, [router])
 
   return (
     <MemberLayout

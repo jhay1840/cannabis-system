@@ -16,6 +16,7 @@ const QRCodeComponent = ({ qrLink }) => {
           light: '#ffffff'
         }
       }}
+
       // logo={{
       //   src: 'publicimageslogos\bornhigh.svg',
       //   options: {

@@ -44,7 +44,8 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+  
+return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
 const calculateAge = dob => {
@@ -73,6 +74,7 @@ const MemberCode = () => {
   const [idTypes, setIdTypes] = useState([])
   const [estConsump, setEstConsump] = useState([])
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const fetchMemberData = async () => {
     try {
       const { memberCode } = router.query
@@ -83,6 +85,7 @@ const MemberCode = () => {
         },
         withCredentials: true
       })
+
       // Assuming response.data is an array
       if (response.data && response.data.length > 0) {
         setMemberData(response.data[0])
@@ -181,7 +184,8 @@ const MemberCode = () => {
   if (!memberData) {
     return <p>Loading...</p>
   }
-  return (
+  
+return (
     <DashboardWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>

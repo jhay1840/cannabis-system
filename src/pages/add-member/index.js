@@ -55,6 +55,7 @@ const Members = () => {
   const [nationality, setNationality] = useState('')
   const [consumption, setConsumption] = useState('')
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   const {
     register,
     handleSubmit,
@@ -69,8 +70,11 @@ const Members = () => {
     e.preventDefault()
     if (!signatureImage && userRole == 'member') {
       alert('Signature image is missing. Please save the signature first.')
-      return
+      
+return
     }
+
+
     // check if the email exist
     const registrationEmail = {
       email
@@ -89,7 +93,8 @@ const Members = () => {
     if (emailCheckResponse.status === 204) {
       setEmailErrorMessage('Email already exists')
       window.scrollTo({ top: 0, behavior: 'smooth' })
-      return
+      
+return
     } else {
       try {
         const registrationData = {
@@ -108,6 +113,7 @@ const Members = () => {
           agreement,
           idType,
           consumption
+
           // Add other fields as needed
         }
 
@@ -147,14 +153,17 @@ const Members = () => {
           console.log('Account created successfully:', registrationResponse.data)
           const memberCode = registrationResponse.data.memberCode // Replace 'memberCode' with the actual property name
           router.push(`/members/profile/${memberCode}`)
+
           // Clear form data or perform other actions if needed
         } else {
           // Handle the case where user creation was not successful
           console.error('User creation failed:', registrationResponse.data)
+
           // You may want to show an error message or take appropriate action
         }
       } catch (error) {
         console.error('Error during account creation:', error)
+
         // Handle errors, show an alert, etc.
       }
     }
@@ -169,7 +178,8 @@ const Members = () => {
     for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i)
     }
-    return new Blob([ab], { type: mimeString })
+    
+return new Blob([ab], { type: mimeString })
   }
 
   useEffect(() => {

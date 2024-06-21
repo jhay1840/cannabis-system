@@ -16,6 +16,7 @@ import TableReport from '../tables/TableReport'
 import BarGraphReport from 'src/views/reports/BarGraphReport'
 import BarGraphReportMonthly from './BarGraphReportMonthly'
 import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+
 // ** Icons Imports
 import Cannabis from 'mdi-material-ui/Cannabis'
 import BasketCheckOutline from 'mdi-material-ui/BasketCheckOutline'
@@ -26,7 +27,8 @@ const getTodayMonth = () => {
   const today = new Date()
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}`
+  
+return `${year}-${month}`
 }
 
 const TabReportMonthly = () => {
@@ -75,8 +77,10 @@ const TabReportMonthly = () => {
           const year = date.getFullYear()
           const month = String(date.getMonth() + 1).padStart(2, '0') // Add 1 to month for zero-based index
           const day = String(date.getDate()).padStart(2, '0')
-          return `${year}-${month}-${day}`
+          
+return `${year}-${month}-${day}`
         }
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: {
             this: 'fetchdatapak',
@@ -125,6 +129,7 @@ const TabReportMonthly = () => {
         console.error('Error fetching data:', error)
       }
     }
+
     const fetchBarData = async () => {
       try {
         const date = new Date(closeDate)
@@ -132,6 +137,7 @@ const TabReportMonthly = () => {
 
         // Calculate start date as January 1st of the current year
         const startDate = new Date(year, 0, 1)
+
         // Calculate end date as December 31st of the current year
         const endDate = new Date(year, 11, 31)
 
@@ -142,7 +148,8 @@ const TabReportMonthly = () => {
           const year = date.getFullYear()
           const month = String(date.getMonth() + 1).padStart(2, '0') // Add 1 to month for zero-based index
           const day = String(date.getDate()).padStart(2, '0')
-          return `${year}-${month}-${day}`
+          
+return `${year}-${month}-${day}`
         }
 
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
@@ -187,7 +194,8 @@ const TabReportMonthly = () => {
           const year = date.getFullYear()
           const month = String(date.getMonth() + 1).padStart(2, '0') // Add 1 to month for zero-based index
           const day = String(date.getDate()).padStart(2, '0')
-          return `${year}-${month}-${day}`
+          
+return `${year}-${month}-${day}`
         }
 
         const formattedLastMonthStartDate = formatDate(lastMonthStartDate)
@@ -242,7 +250,8 @@ const TabReportMonthly = () => {
         'December'
       ]
       const month = new Date(date).getMonth() // Get month index (0-11)
-      return months.indexOf(months[month])
+      
+return months.indexOf(months[month])
     }
 
     setMonthIndex(getMonthIndex(closeDate))
@@ -253,6 +262,7 @@ const TabReportMonthly = () => {
     // Calculate the percentage change only when totalUsage and totalUsageLastMonth are set
     if (totalUsage !== '' && totalUsageLastMonth !== '') {
       const percentageChange = ((totalUsage - totalUsageLastMonth) / totalUsageLastMonth) * 100
+
       // Check if the percentageChange is finite
       let trendValue = isFinite(percentageChange) ? percentageChange.toFixed(2) : ''
 

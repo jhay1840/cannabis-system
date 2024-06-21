@@ -49,7 +49,8 @@ const transformImageUrl = imageUrl => {
   if (!imageUrl || typeof imageUrl !== 'string') {
     return '/images/avatars/cannabis-product-default.jpg'
   }
-  return imageUrl.replace(/\\/g, '/')
+  
+return imageUrl.replace(/\\/g, '/')
 }
 
 const formatDate = dateString => {
@@ -58,7 +59,8 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+  
+return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
 const calculateAge = dob => {
@@ -103,6 +105,7 @@ const MemberCode = () => {
     const fetchMemberData = async () => {
       try {
         const { memberCode } = router.query
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/members/${memberCode}`, {
           headers: {
             Authorization: `Bearer ${token}` // Include JWT token in Authorization header
@@ -122,11 +125,13 @@ const MemberCode = () => {
       fetchMemberData()
       fetchTransactionData()
     }
+
     const getCurrentDomain = () => {
       if (typeof window !== 'undefined') {
         return window.location.origin
       }
-      return ''
+      
+return ''
     }
 
     setAppLink(getCurrentDomain())
@@ -135,6 +140,7 @@ const MemberCode = () => {
   useEffect(() => {
     fetchData()
   }, [])
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts`, {
@@ -152,16 +158,19 @@ const MemberCode = () => {
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
+
     const timer = setTimeout(() => {
       handleSearch()
     }, 500)
     setDebounceTimer(timer)
-    return () => clearTimeout(timer)
+    
+return () => clearTimeout(timer)
   }, [searchQuery])
 
   const handleLoadMore = () => {
     setInitialLoadCount(prevCount => prevCount + loadMoreCount)
   }
+
   const fetchTransactionData = async () => {
     const { memberCode } = router.query
     const memberId = memberCode
@@ -184,6 +193,7 @@ const MemberCode = () => {
       console.error('Error fetching transaction data:', error)
     }
   }
+
   const handleSearch = async () => {
     if (searchQuery.length > 2) {
       try {
@@ -255,6 +265,8 @@ const MemberCode = () => {
       setOpenAlert(true)
     } else {
       const { memberCode } = router.query
+
+
       // Filter out products with weight zero and create a new array with only ID and weight information
       const productsToSend = products
         .filter(({ weight }) => weight > 0)
@@ -263,6 +275,7 @@ const MemberCode = () => {
           weight: Number(weight.toFixed(4)) // Round weight to 4 decimal places
         }))
       const queryString = `?products=${JSON.stringify(productsToSend)}`
+
       // Convert the new array to a JSON string for the query string
       router.push(`/dispense/checkout/${memberCode}${queryString}`)
     }
@@ -278,7 +291,8 @@ const MemberCode = () => {
   const expiryDate = memberData.expiryDate
   const isExpired = expiryDate && new Date(expiryDate) < new Date()
   const expiryWarning = !expiryDate ? 'Expiry date not set' : isExpired ? 'Membership expired' : ''
-  return (
+  
+return (
     <DashboardWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>

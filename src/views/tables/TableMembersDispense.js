@@ -16,8 +16,10 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+  
+return new Date(dateString).toLocaleDateString(undefined, options)
 }
+
 const calculateAge = dob => {
   const birthDate = new Date(dob)
   const today = new Date()

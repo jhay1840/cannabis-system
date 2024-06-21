@@ -37,16 +37,18 @@ const transformImageUrl = imageUrl => {
       return '/images/avatars/cannabis-product-default.jpg'
     }
     let correctedPath = imageUrl.replace(/\\/g, '/')
+
     // Construct the new image URL
     // return `/server/${correctedPath}`
     return correctedPath
   } else {
     console.error('Image URL must be a string.')
+
     return null // or handle the case appropriately
   }
 }
 
-const addStocks = () => {
+const AddStocks = () => {
   const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
@@ -73,6 +75,7 @@ const addStocks = () => {
 
   const router = useRouter()
   const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null
+
   // Define onChange handlers for amountPurchased and purchasePrice
   const handleAmountPurchasedChange = e => {
     const value = parseFloat(e.target.value)
@@ -115,6 +118,7 @@ const addStocks = () => {
     // Validate input fields
     if (amountPurchased < 0 || realWeight < 0 || jarWeight < 0 || purchasePrice < 0 || dispensePrice < 0) {
       alert('Negative numbers are not allowed.')
+
       return
     }
 
@@ -155,6 +159,7 @@ const addStocks = () => {
       }
     } catch (error) {
       console.error('Error adding stocks:', error)
+
       // Handle error (e.g., show error message to the user)
     }
   }
@@ -168,6 +173,7 @@ const addStocks = () => {
           return
         }
         setProductCode(productCode)
+
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/protected/cannabisProducts/${productCode}`,
           {
@@ -177,6 +183,7 @@ const addStocks = () => {
             withCredentials: true
           }
         )
+
         // Assuming response.data is an object
         if (response.data) {
           setProductData(response.data)
@@ -187,6 +194,7 @@ const addStocks = () => {
 
           setImgSrc(transformImageUrl(response.data.imageURL))
           setCurrStock(response.data.stock)
+
           // setProductImage(transformImageUrl(response.data.imageURL))
         }
       } catch (error) {
@@ -430,4 +438,4 @@ const addStocks = () => {
   )
 }
 
-export default addStocks
+export default AddStocks

@@ -15,7 +15,8 @@ const BarGraphReport = ({ data, closeDate }) => {
   const getDayLabel = dateStr => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     const date = new Date(dateStr)
-    return days[date.getDay()]
+    
+return days[date.getDay()]
   }
 
   // Initialize daily usage data for each day of the week

@@ -16,6 +16,7 @@ import TableReport from '../tables/TableReport'
 
 import BarGraphReportWeekly from './BarGraphReportWeekly'
 import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+
 // ** Icons Imports
 import Cannabis from 'mdi-material-ui/Cannabis'
 import BasketCheckOutline from 'mdi-material-ui/BasketCheckOutline'
@@ -27,8 +28,10 @@ const getTodayDate = () => {
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const day = String(today.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  
+return `${year}-${month}-${day}`
 }
+
 const TabReportWeekly = () => {
   const [tableData, setTableData] = useState([])
   const [barData, setBarData] = useState([])
@@ -116,6 +119,7 @@ const TabReportWeekly = () => {
         console.error('Error fetching data:', error)
       }
     }
+
     const fetchBarData = async () => {
       try {
         const endDate = new Date(closeDate)
@@ -149,6 +153,7 @@ const TabReportWeekly = () => {
         console.error('Error fetching barData:', error)
       }
     }
+
     const fetchDataLastWeek = async () => {
       try {
         // Get the current close date from the existing closeDate variable
@@ -165,6 +170,7 @@ const TabReportWeekly = () => {
           2,
           '0'
         )}-${String(lastMonday.getDate()).padStart(2, '0')}`
+
         const formattedLastSunday = `${lastSunday.getFullYear()}-${String(lastSunday.getMonth() + 1).padStart(
           2,
           '0'
@@ -203,7 +209,8 @@ const TabReportWeekly = () => {
     const getDayIndex = date => {
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
       const day = new Date(date).getDay() // Get day index (0-6)
-      return days.indexOf(days[day])
+      
+return days.indexOf(days[day])
     }
 
     setDayIndex(getDayIndex(closeDate))
@@ -213,6 +220,7 @@ const TabReportWeekly = () => {
     // Calculate the percentage change only when totalUsage and totalUsageYesterday are set
     if (totalUsage !== '' && totalUsageLastWeek !== '') {
       const percentageChange = ((totalUsage - totalUsageLastWeek) / totalUsageLastWeek) * 100
+
       // Check if the percentageChange is finite
       let trendValue = isFinite(percentageChange) ? percentageChange.toFixed(2) : ''
 
@@ -224,7 +232,8 @@ const TabReportWeekly = () => {
       setTrend(trendValue)
     }
   }, [totalUsage, totalUsageLastWeek])
-  return (
+  
+return (
     <CardContent>
       <Grid container spacing={6} sx={{ display: 'flex', alignItems: 'center' }}>
         <Grid item xs={6}>

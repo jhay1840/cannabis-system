@@ -29,8 +29,11 @@ const getTodayDate = () => {
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const day = String(today.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  
+return `${year}-${month}-${day}`
 }
+
+
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')({
   right: 0,
@@ -46,6 +49,7 @@ const TrophyImg = styled('img')({
   height: 98,
   position: 'absolute'
 })
+
 const Dashboard = () => {
   const [barData, setBarData] = useState([])
   const [overviewData, setOverviewData] = useState([])
@@ -66,6 +70,7 @@ const Dashboard = () => {
     const fetchOverviewData = async () => {
       try {
         setLoading(true)
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/overview`, {
           headers: {
             Authorization: `Bearer ${token}` // Include JWT token in Authorization header
@@ -126,6 +131,7 @@ const Dashboard = () => {
               usage: 0
             }
           }
+
           // Add usage to the existing product or create a new entry if not exist
           productUsageMap[item.productId].usage += usage
         })

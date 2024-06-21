@@ -72,7 +72,8 @@ const TableTransaction = ({ data }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <p>No data available.</p>
   }
-  return (
+  
+return (
     <TableContainer component={Paper}>
       <Table aria-label='collapsible table'>
         <TableHead>

@@ -27,7 +27,8 @@ const BarGraphReportMonthly = ({ data, closeDate }) => {
       'December'
     ]
     const date = new Date(dateStr)
-    return months[date.getMonth()]
+    
+return months[date.getMonth()]
   }
 
   // Initialize monthly usage data for each month of the year

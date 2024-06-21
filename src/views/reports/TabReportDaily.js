@@ -25,6 +25,7 @@ import BasketOutline from 'mdi-material-ui/BasketOutline'
 
 const getYesterdayDate = () => {
   const today = new Date()
+
   // Get yesterday's date by subtracting 1 day from today
   const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
 
@@ -56,6 +57,7 @@ const TabReportDaily = () => {
       try {
         setTotalProducts('0')
         setTopProduct('N/A')
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: closeDate, endDate: closeDate },
           headers: {
@@ -99,6 +101,7 @@ const TabReportDaily = () => {
         console.error('Error fetching data:', error)
       }
     }
+
     const fetchDataYesterday = async () => {
       try {
         // Get the current close date from the existing closeDate variable
@@ -113,6 +116,7 @@ const TabReportDaily = () => {
           2,
           '0'
         )}-${String(yesterdayDate.getDate()).padStart(2, '0')}`
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/protected/reports`, {
           params: { startDate: formattedYesterdayDate, endDate: formattedYesterdayDate },
           headers: {
@@ -136,6 +140,7 @@ const TabReportDaily = () => {
         console.error('Error fetching data:', error)
       }
     }
+
     const fetchBarData = async () => {
       try {
         const startDate = new Date(closeDate)
@@ -192,6 +197,7 @@ const TabReportDaily = () => {
     // Calculate the percentage change only when totalUsage and totalUsageYesterday are set
     if (totalUsage !== '' && totalUsageYesterday !== '') {
       const percentageChange = ((totalUsage - totalUsageYesterday) / totalUsageYesterday) * 100
+
       // Check if the percentageChange is finite
       let trendValue = isFinite(percentageChange) ? percentageChange.toFixed(2) : ''
 
@@ -203,7 +209,8 @@ const TabReportDaily = () => {
       setTrend(trendValue)
     }
   }, [totalUsage, totalUsageYesterday])
-  return (
+  
+return (
     <CardContent>
       <Grid container spacing={6} sx={{ display: 'flex', alignItems: 'center' }}>
         <Grid item xs={6}>
