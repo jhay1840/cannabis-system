@@ -223,7 +223,7 @@ const MemberWrapper = ({ children  })=>{
                 return;
             }
             try {
-                const response = await external_axios_default().get(`${"http://localhost:5000"}/api/public/user-type`, {
+                const response = await external_axios_default().get(`${"http://3.83.33.251:5000"}/api/public/user-type`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Include JWT token in Authorization header
                     },

@@ -33,7 +33,7 @@ const DashboardWrapper = ({ children  })=>{
                 return;
             }
             try {
-                const response = await axios__WEBPACK_IMPORTED_MODULE_3___default().get(`${"http://localhost:5000"}/api/public/user-type`, {
+                const response = await axios__WEBPACK_IMPORTED_MODULE_3___default().get(`${"http://3.83.33.251:5000"}/api/public/user-type`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Include JWT token in Authorization header
                     },

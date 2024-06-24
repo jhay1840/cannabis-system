@@ -1093,7 +1093,7 @@ const UserDropdown = ()=>{
     };
     const handleLogout = async ()=>{
         try {
-            await external_axios_default().get(`${"http://localhost:5000"}/logout`, {
+            await external_axios_default().get(`${"http://3.83.33.251:5000"}/logout`, {
                 withCredentials: true
             });
             sessionStorage.removeItem("token");
