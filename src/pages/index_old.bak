@@ -37,6 +37,7 @@ const Dashboard = () => {
           <Grid item xs={12} md={6} lg={4}>
             <WeeklyOverview />
           </Grid>
+          cl
           <Grid item xs={12} md={6} lg={4}>
             <TotalEarning />
           </Grid>

@@ -86,7 +86,6 @@ const TabSettings = () => {
   const handleSaveChanges = async () => {
     const settingsData = {
       appName,
-      appLink,
       idTypes,
       estimatedConsumption,
       cannabisCategories,
