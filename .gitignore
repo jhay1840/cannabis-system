@@ -8,8 +8,7 @@
 # testing
 /coverage
 
-# Next.js build output (modify this to allow)
-.next/
+# Next.js build output (allow .next but ignore .next/cache)
 .next/cache/
 
 # production
