@@ -13,8 +13,8 @@ const ConfirmEmailPage = () => {
       const { confirmCode } = router.query
       if (!confirmCode) {
         console.error('confirmation code is missing.')
-        
-return
+
+        return
       }
       if (confirmCode) {
         try {
@@ -22,6 +22,7 @@ return
           console.log(res.data) // Log the response from the backend
           if (res.data === 'Email confirmed and password reset link sent') {
             // Redirect to login page upon successful email confirmation
+            alert('Email confirmed. Please check your email for password reset link')
             router.push('/login')
           } else {
             // Handle other responses or show a message

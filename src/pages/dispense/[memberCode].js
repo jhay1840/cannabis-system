@@ -49,8 +49,8 @@ const transformImageUrl = imageUrl => {
   if (!imageUrl || typeof imageUrl !== 'string') {
     return '/images/avatars/cannabis-product-default.jpg'
   }
-  
-return imageUrl.replace(/\\/g, '/')
+
+  return imageUrl.replace(/\\/g, '/')
 }
 
 const formatDate = dateString => {
@@ -59,8 +59,8 @@ const formatDate = dateString => {
   }
 
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-  
-return new Date(dateString).toLocaleDateString(undefined, options)
+
+  return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
 const calculateAge = dob => {
@@ -130,8 +130,8 @@ const MemberCode = () => {
       if (typeof window !== 'undefined') {
         return window.location.origin
       }
-      
-return ''
+
+      return ''
     }
 
     setAppLink(getCurrentDomain())
@@ -163,8 +163,8 @@ return ''
       handleSearch()
     }, 500)
     setDebounceTimer(timer)
-    
-return () => clearTimeout(timer)
+
+    return () => clearTimeout(timer)
   }, [searchQuery])
 
   const handleLoadMore = () => {
@@ -266,7 +266,6 @@ return () => clearTimeout(timer)
     } else {
       const { memberCode } = router.query
 
-
       // Filter out products with weight zero and create a new array with only ID and weight information
       const productsToSend = products
         .filter(({ weight }) => weight > 0)
@@ -291,8 +290,8 @@ return () => clearTimeout(timer)
   const expiryDate = memberData.expiryDate
   const isExpired = expiryDate && new Date(expiryDate) < new Date()
   const expiryWarning = !expiryDate ? 'Expiry date not set' : isExpired ? 'Membership expired' : ''
-  
-return (
+
+  return (
     <DashboardWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12}>

@@ -65,6 +65,7 @@ const TabReportDaily = () => {
           },
           withCredentials: true // Add this option
         })
+
         setTableData(response.data)
         let totalUsageLoop = 0
         response.data.forEach(item => {
@@ -209,8 +210,8 @@ const TabReportDaily = () => {
       setTrend(trendValue)
     }
   }, [totalUsage, totalUsageYesterday])
-  
-return (
+
+  return (
     <CardContent>
       <Grid container spacing={6} sx={{ display: 'flex', alignItems: 'center' }}>
         <Grid item xs={6}>

@@ -1,8 +1,7 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import dotenv from 'dotenv'
-import { useEffect } from 'react'
 
 dotenv.config()
 
@@ -13,9 +12,6 @@ import { useRouter } from 'next/router'
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-
-// import Divider from '@mui/material/Divider'
-// import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
@@ -92,27 +88,33 @@ const ResetPasswordPage = () => {
     try {
       if (!resetID) {
         console.error('Reset token is missing.')
-        
-return false
+
+        return false
       }
 
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/reset-password/${resetID}`, {
         newPassword: password
       })
 
-      if (response.status === 200 && response.data && response.data.success) {
+      if (response.status === 200) {
         console.log('Password reset successful:', response.data.message)
-        
-return true
+        alert('Password changed successfully')
+
+        return true
+      } else if (response.status == 400) {
+        console.error('Password reset token is expired:', response.data.message)
+        alert('Password reset token is expired. Please request a new reset link.')
+
+        return false
       } else {
         console.error('Password reset failed:', response.data.message)
-        
-return false
+
+        return false
       }
     } catch (error) {
       console.error('Password reset failed:', error)
-      
-return false
+
+      return false
     }
   }
 
@@ -120,8 +122,8 @@ return false
     event.preventDefault()
     if (password !== confirmPassword) {
       setResetError('Passwords do not match')
-      
-return
+
+      return
     }
 
     const { resetID } = router.query // Retrieve resetID from the router query
@@ -129,8 +131,8 @@ return
     if (!resetID) {
       console.error('Reset token is missing.')
       setResetError('Reset token is missing.')
-      
-return
+
+      return
     }
 
     const success = await resetPassword(resetID, password) // Pass resetID and password to resetPassword function
@@ -138,7 +140,7 @@ return
     if (success) {
       router.push('/login')
     } else {
-      setResetError('Failed to reset password')
+      setResetError('Invalid or token expired ')
     }
   }
 

@@ -1,21 +1,14 @@
-// ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import dotenv from 'dotenv'
-import { useEffect } from 'react'
 
 dotenv.config()
 
-// ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-
-// import Divider from '@mui/material/Divider'
-// import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
@@ -27,25 +20,13 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
-
-// ** Icons Imports
-// import Google from 'mdi-material-ui/Google'
-// import Github from 'mdi-material-ui/Github'
-// import Twitter from 'mdi-material-ui/Twitter'
-// import Facebook from 'mdi-material-ui/Facebook'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-// ** Configs
 import themeConfig from 'src/configs/themeConfig'
-
-// ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
-
-// ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 
-// ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))
@@ -64,22 +45,17 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const LoginPage = () => {
-  // ** State
   const [values, setValues] = useState({
     password: '',
     showPassword: false
   })
 
-  // ** Hook
   const theme = useTheme()
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
-
-  // const handleChange = prop => event => {
-  //   setValues({ ...values, [prop]: event.target.value })
-  // }
+  const [errorKey, setErrorKey] = useState(0)
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
@@ -92,40 +68,24 @@ const LoginPage = () => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(
-
-        // process.env.REACT_APP_API + '/login',
         `${process.env.NEXT_PUBLIC_API_URL}/login`,
-
-        {
-          email,
-          password
-        },
-        {
-          withCredentials: true
-        }
+        { email, password },
+        { withCredentials: true }
       )
-
-      // const { token } = res.data;
-
-      const { userRole } = res.data
-      const { token } = res.data
-
-      // Store the token in session storage
+      const { userRole, token } = res.data
       sessionStorage.setItem('token', token)
 
-      // console.log(token);
       return userRole
     } catch (error) {
-      // console.log(error)
+      console.log('')
+
       return false
     }
   }
 
   const handleSubmit = async event => {
     event.preventDefault()
-
     const success = await login(email, password)
-
     if (success) {
       if (success === 'superadmin' || success === 'admin') {
         router.push('/')
@@ -134,24 +94,20 @@ const LoginPage = () => {
       }
     } else {
       setLoginError('Invalid email or password')
+      setErrorKey(prevKey => prevKey + 1) // Increment the error key to re-render the element
     }
   }
 
-  // go to dashboard if logged in
   useEffect(() => {
-    // Check for JWT cookie and get user details
     const token = sessionStorage.getItem('token')
     if (token) {
       const getUserDetails = async () => {
         try {
           const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/public/user-type`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
+            headers: { Authorization: `Bearer ${token}` },
             withCredentials: true
           })
           const userType = response.data
-
           if (userType === 'superadmin' || userType === 'admin') {
             router.push('/')
           } else if (userType === 'member') {
@@ -163,12 +119,35 @@ const LoginPage = () => {
       }
       getUserDetails()
     } else {
-      router.push('/login') // Redirect to login if token is not found
+      router.push('/login')
     }
-  }, []) // Empty dependency array ensures useEffect runs only once on mount
+  }, [])
 
   return (
     <Box className='content-center'>
+      <style>{`
+        @keyframes shake {
+          0% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-5px);
+          }
+          50% {
+            transform: translateX(5px);
+          }
+          75% {
+            transform: translateX(-5px);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+        .error {
+          color: red;
+          animation: shake 0.5s;
+        }
+      `}</style>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -211,63 +190,23 @@ const LoginPage = () => {
                 }
               />
             </FormControl>
-            {loginError && <div className='text-red-800 '>{loginError}</div>}
+            {loginError && (
+              <div key={errorKey} className='error'>
+                {loginError}
+              </div>
+            )}
             <Box
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
-              {/* <FormControlLabel control={<Checkbox />} label='Remember Me' /> */}
               <Link passHref href='/'>
                 <LinkStyled onClick={e => e.preventDefault()} sx={{ mt: 3 }}>
                   Forgot Password?
                 </LinkStyled>
               </Link>
             </Box>
-            <Button
-              fullWidth
-              size='large'
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-              type='submit'
-
-              // onClick={() => router.push('/')}
-            >
+            <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} type='submit'>
               Login
             </Button>
-            {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2' sx={{ marginRight: 2 }}>
-                New on our platform?
-              </Typography>
-              <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Create an account</LinkStyled>
-                </Link>
-              </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
-            </Box> */}
           </form>
         </CardContent>
       </Card>
